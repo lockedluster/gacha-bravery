@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Teyvat Roulette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#12141c; --surface:#191c27; --surface2:#212533; --line:#2c3040;
+  --text:#eae7dc; --muted:#9296a8; --gold:#caa452; --gold-soft:#caa45233;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f3efe4; --surface:#ffffff; --surface2:#f0ece0; --line:#ddd6c3;
+    --text:#232014; --muted:#726d5c; --gold:#a5772b; --gold-soft:#a5772b22;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12141c; --surface:#191c27; --surface2:#212533; --line:#2c3040;
+  --text:#eae7dc; --muted:#9296a8; --gold:#caa452; --gold-soft:#caa45233;
+}
+*{box-sizing:border-box;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{margin:0; background:var(--bg); color:var(--text); font-family:'Manrope',system-ui,sans-serif; min-height:100%; padding:28px 18px 60px;}
+.wrap{max-width:820px; margin:0 auto;}
+header{text-align:center; margin-bottom:28px;}
+h1{font-family:'Cinzel',serif; font-weight:700; letter-spacing:.02em; font-size:clamp(28px,6vw,40px); margin:0 0 6px; color:var(--gold);}
+header p{color:var(--muted); margin:0; font-size:15px;}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin-bottom:14px;}
+details summary{cursor:pointer; font-family:'Cinzel',serif; font-size:17px; font-weight:600; list-style:none; display:flex; justify-content:space-between; align-items:center; padding:4px 0;}
+details summary::-webkit-details-marker{display:none;}
+summary .count{font-family:'Manrope',sans-serif; font-weight:500; font-size:13px; color:var(--muted);}
+summary::after{content:'▾'; color:var(--gold); transition:transform .2s;}
+details[open] summary::after{transform:rotate(180deg);}
+.group{margin-top:14px;}
+.group-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:9px;}
+.group-head b{font-size:13px; letter-spacing:.03em;}
+.group-head .mini{background:none; border:1px solid var(--line); color:var(--muted); font-size:11px; border-radius:20px; padding:3px 9px; cursor:pointer;}
+.chips{display:grid; grid-template-columns:repeat(auto-fill,minmax(74px,1fr)); gap:12px 9px;}
+.item-card{display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; user-select:none;}
+.thumb{width:100%; aspect-ratio:1/1; border-radius:11px; background:var(--surface2); border:2px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:'Cinzel',serif; font-weight:600; font-size:17px; color:var(--muted); position:relative; overflow:hidden; transition:opacity .15s, border-color .15s;}
+.thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+.item-card:not(.on) .thumb{opacity:.4;}
+.item-card.on .thumb{border-color:var(--accent,var(--gold));}
+.thumb .check{position:absolute; top:3px; right:3px; width:16px; height:16px; border-radius:50%; background:var(--accent,var(--gold)); color:#12141c; font-size:10px; font-weight:700; display:none; align-items:center; justify-content:center;}
+.item-card.on .thumb .check{display:flex;}
+.item-label{font-size:10.5px; text-align:center; line-height:1.2; color:var(--text); max-width:80px;}
+.controls{display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:center; margin:22px 0;}
+.stepper{display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:6px 14px;}
+.stepper button{width:26px; height:26px; border-radius:50%; border:1px solid var(--line); background:var(--surface2); color:var(--text); font-size:15px; cursor:pointer;}
+.toggle-row{display:flex; align-items:center; gap:7px; font-size:13px; color:var(--muted);}
+.toggle-row input{accent-color:var(--gold);}
+.roll-btn{display:block; margin:0 auto 30px; font-family:'Cinzel',serif; font-weight:700; font-size:18px; letter-spacing:.03em; background:var(--gold); color:#1a1408; border:none; padding:14px 40px; border-radius:30px; cursor:pointer; box-shadow:0 6px 18px var(--gold-soft);}
+.roll-btn:active{transform:translateY(1px);}
+#msg{text-align:center; color:var(--muted); font-size:14px; min-height:20px; margin-bottom:10px;}
+#results{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px;}
+.result-card{background:var(--surface); border:1px solid var(--line); border-top:4px solid var(--elc,var(--gold)); border-radius:12px; padding:16px; min-width:0;}
+.result-card .result-head{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+.result-card .result-icon{width:48px; height:48px; border-radius:10px; overflow:hidden; border:1px solid var(--line); background:var(--surface2); display:flex; align-items:center; justify-content:center; font-family:'Cinzel',serif; font-size:12px; font-weight:700; color:var(--text); text-transform:uppercase; flex-shrink:0;}
+.result-card .result-icon img{width:100%; height:100%; object-fit:cover; display:block;}
+.result-card h3{margin:0 0 2px; font-family:'Cinzel',serif; font-size:19px;}
+.result-card .elem{font-size:12px; color:var(--elc,var(--muted)); font-weight:700; letter-spacing:.04em; margin-bottom:12px;}
+.result-card .row{display:flex; align-items:flex-start; gap:8px; font-size:13px; color:var(--muted); margin-bottom:6px;}
+.result-card .row .label{min-width:70px; color:var(--muted); font-weight:600; padding-top:2px; flex-shrink:0;}
+.result-card .row b{color:var(--text); font-weight:600;}
+.result-card .result-item{display:flex; align-items:center; gap:8px; min-height:22px; flex-wrap:wrap; word-break:break-word;}
+.result-card .result-item .mini-icon{width:20px; height:20px; border-radius:6px; object-fit:cover; display:flex; align-items:center; justify-content:center; background:var(--surface2); border:1px solid var(--line); font-size:8px; color:var(--text); font-family:'Cinzel',serif; overflow:hidden; flex-shrink:0;}
+.result-card .result-item .mini-icon img{width:100%; height:100%; object-fit:cover; display:block;}
+.result-card .note{font-size:11px; color:var(--gold); margin-top:6px;}
+footer{text-align:center; color:var(--muted); font-size:12px; margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Teyvat Roulette</h1>
+  <p>Ultimate Bravery for Genshin Impact — random team, random weapons, random artifacts.</p>
+</header>
+
+<div class="card"><details id="det-chars"><summary>Owned Characters <span class="count" id="chars-count"></span></summary><div id="chars-groups"></div></details></div>
+<div class="card"><details id="det-weapons"><summary>Owned Weapons <span class="count" id="weapons-count"></span></summary><div id="weapons-groups"></div></details></div>
+<div class="card"><details id="det-artifacts"><summary>Owned Artifact Sets <span class="count" id="artifacts-count"></span></summary><div id="artifacts-groups"></div></details></div>
+
+<div class="controls">
+  <div class="stepper"><button id="team-dec">−</button><span id="team-size">4</span> characters<button id="team-inc">+</button></div>
+  <label class="toggle-row"><input type="checkbox" id="combo-toggle"> allow 2pc+2pc combinations</label>
+</div>
+
+<button class="roll-btn" id="roll-btn">🎲 Roll</button>
+<div id="msg"></div>
+<div id="results"></div>
+
+<footer>Selections are saved on this device. Everything defaults to "owned." Teams never repeat a character, and never contain Travelers of two different elements.</footer>
+</div>
+
+<script>
+const ELEMENTS = {P:['Pyro','#e8623c'],H:['Hydro','#4fa8e0'],A:['Anemo','#7fd9c4'],E:['Electro','#b98be0'],D:['Dendro','#a8c848'],C:['Cryo','#9fe0e8'],G:['Geo','#e0b64f']};
+const WTYPES = {S:'Sword',C:'Claymore',L:'Polearm',B:'Bow',M:'Catalyst'};
+
+const CHAR_TXT = `Amber|P|B
+Bennett|P|S
+Xiangling|P|L
+Diluc|P|C
+Klee|P|M
+Yoimiya|P|B
+Hu Tao|P|L
+Yanfei|P|M
+Thoma|P|L
+Dehya|P|C
+Lyney|P|B
+Chevreuse|P|L
+Arlecchino|P|L
+Mavuika|P|C
+Xinyan|P|C
+Gaming|P|C
+Nicole|P|M
+Durin|P|S
+Traveler (Pyro)|P|S|trav
+Barbara|H|M
+Xingqiu|H|S
+Tartaglia|H|B
+Mona|H|M
+Sangonomiya Kokomi|H|M
+Yelan|H|B
+Kamisato Ayato|H|S
+Nilou|H|S
+Furina|H|S
+Neuvillette|H|M
+Sigewinne|H|B
+Mualani|H|M
+Vodyanitsa|H|M
+Aino|H|C
+Candace|H|L
+Dahlia|H|S
+Columbina|H|M
+Traveler (Hydro)|H|S|trav
+Sucrose|A|M
+Jean|A|S
+Venti|A|B
+Xiao|A|L
+Kaedehara Kazuha|A|S
+Sayu|A|C
+Shikanoin Heizou|A|M
+Wanderer|A|M
+Faruzan|A|B
+Xianyun|A|M
+Chasca|A|B
+Lynette|A|S
+Yumemizuki Mizuki|A|M
+Vesna|A|S
+Varka|A|C
+Jahoda|A|B
+Prune|A|M
+Ifa|A|M
+Lan Yan|A|M
+Traveler (Anemo)|A|S|trav
+Beidou|E|C
+Fischl|E|B
+Razor|E|C
+Keqing|E|S
+Cyno|E|L
+Yae Miko|E|M
+Kuki Shinobu|E|S
+Raiden Shogun|E|L
+Dori|E|C
+Lisa|E|M
+Clorinde|E|S
+Sethos|E|B
+Ororon|E|M
+Varesa|E|C
+Kujou Sara|E|B
+Iansan|E|L
+Flins|E|L
+Ineffa|E|L
+Alyosha|E|L
+Traveler (Electro)|E|S|trav
+Ningguang|G|M
+Noelle|G|C
+Zhongli|G|L
+Albedo|G|S
+Yun Jin|G|L
+Arataki Itto|G|C
+Gorou|G|B
+Chiori|G|S
+Navia|G|C
+Xilonen|G|S
+Kachina|G|L
+Illuga|G|L
+Linnea|G|B
+Zibai|G|S
+Traveler (Geo)|G|S|trav
+Chongyun|C|C
+Kaeya|C|S
+Qiqi|C|S
+Diona|C|B
+Rosaria|C|L
+Ganyu|C|B
+Eula|C|C
+Shenhe|C|L
+Kamisato Ayaka|C|S
+Layla|C|S
+Mika|C|L
+Wriothesley|C|M
+Freminet|C|C
+Charlotte|C|M
+Escoffier|C|L
+Skirk|C|S
+Odette|C|S
+Citlali|C|M
+Aloy|C|B
+Sandrone|C|C
+Lohen|C|L
+Traveler (Cryo)|C|S|trav
+Tighnari|D|B
+Collei|D|B
+Yaoyao|D|L
+Kaveh|D|C
+Alhaitham|D|S
+Nahida|D|M
+Baizhu|D|M
+Kirara|D|S
+Emilie|D|L
+Kinich|D|C
+Lauma|D|M
+Nefer|D|M
+Traveler (Dendro)|D|S|trav`;
+
+const WEAPONS = {
+S:["Absolution","Amenoma Kageuchi","Aquila Favonia","Athame Artis","Azurelight","Beyond the Chrysalis","Blackcliff Longsword","Calamity of Eshu","Cinnabar Spindle","Cool Steel","Dark Iron Sword","Dull Blade","Emberwell","Exaiphanes Blade","Favonius Sword","Festering Desire","Fillet Blade","Finale of the Deep","Fleuve Cendre Ferryman","Flute of Ezpitzal","Freedom-Sworn","Harbinger of Dawn","Haran Geppaku Futsu","Heretic's Molten Blade","Iron Sting","Kagotsurube Isshin","Key of Khaj-Nisut","Light of Foliar Incision","Lightbearing Moonshard","Lion's Roar","Mistsplitter Reforged","Moonweaver's Dawn","New Bough","Peak Patrol Song","Primordial Jade Cutter","Prototype Rancour","Royal Longsword","Sacrificial Sword","Sapwood Blade","Serenity's Call","Silver Light","Silver Sword","Skyrider Sword","Skyward Blade","Splendor of Tranquil Waters","Sturdy Bone","Summit Shaper","Sword of Descension","Sword of Narzissenkreuz","The Alley Flash","The Black Sword","The Dockhand's Assistant","The Flute","Toukabou Shigure","Traveler's Handy Sword","Uraku Misugiri","Whitelake Frostfeather","Wolf-Fang","Xiphos' Moonlight"],
+C:["A Teaspoon of Transcendence","A Thousand Blazing Suns","Akuoumaru","Beacon of the Reed Sea","Blackcliff Slasher","Blade of Atonement","Bloodtainted Greatsword","Debate Club","Earth Shaker","Fang of the Mountain King","Favonius Greatsword","Ferrous Shadow","Flame-Forged Insight","Forest Regalia","Forged by the Golden Melody","Fruitful Hook","Gest of the Mighty Wolf","Katsuragikiri Nagamasa","Lithic Blade","Luxurious Sea-Lord","Mailed Flower","Makhaira Aquamarine","Master Key","Old Merc's Pal","Portable Power Saw","Prototype Archaic","Rainslasher","Redhorn Stonethresher","Royal Greatsword","Sacrificial Greatsword","Serpent Spine","Skyrider Greatsword","Skyward Pride","Snow-Tombed Starsilver","Song of Broken Pines","Talking Stick","The Bell","The Unforged","Tidal Shadow","Ultimate Overlord's Mega Magic Sword","Verdict","Waster Greatsword","White Iron Greatsword","Whiteblind","Wolf's Gravestone"],
+L:["Ballad of the Fjords","Beginner's Protector","Black Tassel","Blackcliff Pole","Bloodsoaked Ruins","Calamity Queller","Crescent Pike","Crimson Moon's Semblance","Deathmatch","Dialogues of the Desert Sages","Disaster and Remorse","Dragon's Bane","Dragonspine Spear","Engulfing Lightning","Favonius Lance","Footprint of the Rainbow","Fractured Halo","Frostbreath","Halberd","Iron Point","Kitain Cross Spear","Lithic Spear","Lumidouce Elegy","Missive Windspear","Moonpiercer","Mountain-Bracing Bolt","Primordial Jade Winged-Spear","Prospector's Drill","Prospector's Shovel","Prototype Starglitter","Rightful Reward","Royal Spear","Sacrificer's Staff","Skyward Spine","Song of the Vigil","Staff of Homa","Staff of the Scarlet Sands","Symphonist of Scents","Tamayuratei no Ohanashi","The Catch","Vortex Vanquisher","Wavebreaker's Fin","White Tassel"],
+B:["Alley Hunter","Amos' Bow","Aqua Simulacra","Astral Vulture's Crimson Plumage","Blackcliff Warbow","Breezeborne Refrain","Chain Breaker","Cloudforged","Compound Bow","Covenant of Frost and Snow","Elegy for the End","End of the Line","Fading Twilight","Favonius Warbow","Flower-Wreathed Feathers","Golden Frostbound Oath","Hamayumi","Hunter's Bow","Hunter's Path","Ibis Piercer","Jade Vista","King's Squire","Messenger","Mitternachts Waltz","Mouun's Moon","Polar Star","Predator","Prototype Crescent","Rainbow Serpent's Rain Bow","Range Gauge","Raven Bow","Recurve Bow","Royal Bow","Rust","Sacrificial Bow","Scion of the Blazing Sun","Seasoned Hunter's Bow","Sequence of Solitude","Sharpshooter's Oath","Silvershower Heartstrings","Skyward Harp","Slingshot","Snare Hook","Song of Stillness","The Daybreak Chronicles","The First Great Magic","The Stringless","The Viridescent Hunt","Thundering Pulse","Windblume Ode"],
+M:["A Thousand Floating Dreams","Angelos' Heptades","Apprentice's Notes","Ash-Graven Drinking Horn","Ballad of the Boundless Blue","Blackcliff Agate","Blackmarrow Lantern","Cashflow Supervision","Clash of Kings","Crane's Echoing Call","Dawning Frost","Dodoco Tales","Echoes of the Heart","Emerald Orb","Etherlight Spindlelute","Everlasting Moonglow","Eye of Perception","Favonius Codex","Flowing Purity","Frostbearer","Fruit of Fulfillment","Hakushin Ring","Hymn of the Maelstrom","Jadefall's Splendor","Kagura's Verity","Lost Prayer to the Sacred Winds","Magic Guide","Mappa Mare","Memory of Dust","Nightweaver's Looking Glass","Nocturne's Curtain Call","Oathsworn Eye","Otherworldly Story","Pocket Grimoire","Prototype Amber","Reliquary of Truth","Ring of Yaxche","Royal Grimoire","Sacrificial Fragments","Sacrificial Jade","Skyward Atlas","Solar Pearl","Starcaller's Watch","Sunny Morning Sleep-In","Surf's Up","The Widsith","Thrilling Tales of Dragon Slayers","Tome of the Eternal Flow","Tulaytullah's Remembrance","Twin Nephrite","Vivid Notions","Wandering Evenstar","Waveriding Whirl","Wine and Song","Winter's Heavy Heart"]
+};
+Object.keys(WEAPONS).forEach(k=>WEAPONS[k].sort((a,b)=>a.localeCompare(b)));
+
+// Ordered by release, earliest to latest
+const ARTIFACTS = ["Resolution of Sojourner","Brave Heart","Defender's Will","Tiny Miracle","Berserker","Martial Artist","Instructor","Gambler","The Exile","Scholar","Blizzard Strayer","Thundersoother","Lavawalker","Maiden Beloved","Gladiator's Finale","Viridescent Venerer","Wanderer's Troupe","Thundering Fury","Crimson Witch of Flames","Noblesse Oblige","Bloodstained Chivalry","Prayers for Illumination","Prayers for Destiny","Prayers for Wisdom","Prayers to Springtime","Archaic Petra","Retracing Bolide","Heart of Depth","Tenacity of the Millelith","Pale Flame","Shimenawa's Reminiscence","Emblem of Severed Fate","Husk of Opulent Dreams","Ocean-Hued Clam","Vermillion Hereafter","Echoes of an Offering","Deepwood Memories","Gilded Dreams","Desert Pavilion Chronicle","Flower of Paradise Lost","Nymph's Dream","Vourukasha's Glow","Marechaussee Hunter","Golden Troupe","Song of Days Past","Nighttime Whispers in the Echoing Woods","Fragment of Harmonic Whimsy","Unfinished Reverie","Scroll of the Hero of Cinder City","Obsidian Codex","Long Night's Oath","Finale of the Deep Galleries","Night of the Sky's Unveiling","Silken Moon's Serenade","Aubade of Morningstar and Moon","A Day Carved From Rising Winds","Celestial Gift","Disenchantment in Deep Shadow","Scarlet Proof","Heart of the Furnace"];
+
+const CHARS = CHAR_TXT.trim().split("\n").map(l=>{const [n,e,w,g]=l.split("|"); return {n,e,w,g:g||null};})
+  .sort((a,b)=>a.n.localeCompare(b.n));
+
+let ownedChars, ownedWeapons, ownedArtifacts;
+function load(key, all){ try{ const s = localStorage.getItem(key); if(s) return new Set(JSON.parse(s)); }catch(e){} return new Set(all); }
+function save(key, set){ try{ localStorage.setItem(key, JSON.stringify([...set])); }catch(e){} }
+ownedChars = load('tr_chars', CHARS.map(c=>c.n));
+ownedWeapons = load('tr_weapons', Object.values(WEAPONS).flat());
+ownedArtifacts = load('tr_artifacts', ARTIFACTS);
+// Anything newly added since a saved selection defaults to owned
+(function(){
+  const seen = (()=>{try{return new Set(JSON.parse(localStorage.getItem('tr_seen')||'[]'));}catch(e){return new Set();}})();
+  const all = [...CHARS.map(c=>c.n), ...Object.values(WEAPONS).flat(), ...ARTIFACTS];
+  all.forEach(n=>{
+    if(seen.has(n)) return;
+    if(CHARS.some(c=>c.n===n)) ownedChars.add(n);
+    else if(ARTIFACTS.includes(n)) ownedArtifacts.add(n);
+    else ownedWeapons.add(n);
+  });
+  try{ localStorage.setItem('tr_seen', JSON.stringify(all)); }catch(e){}
+  save('tr_chars',ownedChars); save('tr_weapons',ownedWeapons); save('tr_artifacts',ownedArtifacts);
+})();
+
+const ITEM_IMAGES = {
+  "Amber": "images/characters/amber.png",
+  "Bennett": "images/characters/bennett.png",
+  "Xiangling": "images/characters/xiangling.png",
+  "Diluc": "images/characters/diluc.png",
+  "Klee": "images/characters/klee.png",
+  "Yoimiya": "images/characters/yoimiya.png",
+  "Hu Tao": "images/characters/hu-tao.png",
+  "Yanfei": "images/characters/yanfei.png",
+  "Thoma": "images/characters/thoma.png",
+  "Dehya": "images/characters/dehya.png",
+  "Lyney": "images/characters/lyney.png",
+  "Chevreuse": "images/characters/chevreuse.png",
+  "Arlecchino": "images/characters/arlecchino.png",
+  "Mavuika": "images/characters/mavuika.png",
+  "Xinyan": "images/characters/xinyan.png",
+  "Gaming": "images/characters/gaming.png",
+  "Nicole": "images/characters/nicole.png",
+  "Durin": "images/characters/durin.png",
+  "Traveler (Pyro)": "images/characters/traveler.png",
+  "Barbara": "images/characters/barbara.png",
+  "Xingqiu": "images/characters/xingqiu.png",
+  "Tartaglia": "images/characters/tartaglia.png",
+  "Mona": "images/characters/mona.png",
+  "Sangonomiya Kokomi": "images/characters/sangonomiya-kokomi.png",
+  "Yelan": "images/characters/yelan.png",
+  "Kamisato Ayato": "images/characters/kamisato-ayato.png",
+  "Nilou": "images/characters/nilou.png",
+  "Furina": "images/characters/furina.png",
+  "Neuvillette": "images/characters/neuvillette.png",
+  "Sigewinne": "images/characters/sigewinne.png",
+  "Mualani": "images/characters/mualani.png",
+  "Vodyanitsa": "images/characters/vodyanitsa.png",
+  "Aino": "images/characters/aino.png",
+  "Candace": "images/characters/candace.png",
+  "Dahlia": "images/characters/dahlia.png",
+  "Columbina": "images/characters/columbina.png",
+  "Traveler (Hydro)": "images/characters/traveler.png",
+  "Sucrose": "images/characters/sucrose.png",
+  "Jean": "images/characters/jean.png",
+  "Venti": "images/characters/venti.png",
+  "Xiao": "images/characters/xiao.png",
+  "Kaedehara Kazuha": "images/characters/kaedehara-kazuha.png",
+  "Sayu": "images/characters/sayu.png",
+  "Shikanoin Heizou": "images/characters/shikanoin-heizou.png",
+  "Wanderer": "images/characters/wanderer.png",
+  "Faruzan": "images/characters/faruzan.png",
+  "Xianyun": "images/characters/xianyun.png",
+  "Chasca": "images/characters/chasca.png",
+  "Lynette": "images/characters/lynette.png",
+  "Yumemizuki Mizuki": "images/characters/mizuki.png",
+  "Vesna": "images/characters/vesna.png",
+  "Varka": "images/characters/varka.png",
+  "Jahoda": "images/characters/jahoda.png",
+  "Prune": "images/characters/prune.png",
+  "Ifa": "images/characters/ifa.png",
+  "Lan Yan": "images/characters/lanyan.png",
+  "Traveler (Anemo)": "images/characters/traveler.png",
+  "Beidou": "images/characters/beidou.png",
+  "Fischl": "images/characters/fischl.png",
+  "Razor": "images/characters/razor.png",
+  "Keqing": "images/characters/keqing.png",
+  "Cyno": "images/characters/cyno.png",
+  "Yae Miko": "images/characters/yae-miko.png",
+  "Kuki Shinobu": "images/characters/kuki-shinobu.png",
+  "Raiden Shogun": "images/characters/raiden-shogun.png",
+  "Dori": "images/characters/dori.png",
+  "Lisa": "images/characters/lisa.png",
+  "Clorinde": "images/characters/clorinde.png",
+  "Sethos": "images/characters/sethos.png",
+  "Ororon": "images/characters/ororon.png",
+  "Varesa": "images/characters/varesa.png",
+  "Kujou Sara": "images/characters/kujou-sara.png",
+  "Iansan": "images/characters/iansan.png",
+  "Flins": "images/characters/flins.png",
+  "Ineffa": "images/characters/ineffa.png",
+  "Alyosha": "images/characters/alyosha.png",
+  "Traveler (Electro)": "images/characters/traveler.png",
+  "Ningguang": "images/characters/ningguang.png",
+  "Noelle": "images/characters/noelle.png",
+  "Zhongli": "images/characters/zhongli.png",
+  "Albedo": "images/characters/albedo.png",
+  "Yun Jin": "images/characters/yun-jin.png",
+  "Arataki Itto": "images/characters/arataki-itto.png",
+  "Gorou": "images/characters/gorou.png",
+  "Chiori": "images/characters/chiori.png",
+  "Navia": "images/characters/navia.png",
+  "Xilonen": "images/characters/xilonen.png",
+  "Kachina": "images/characters/kachina.png",
+  "Illuga": "images/characters/illuga.png",
+  "Linnea": "images/characters/linnea.png",
+  "Zibai": "images/characters/zibai.png",
+  "Traveler (Geo)": "images/characters/traveler.png",
+  "Chongyun": "images/characters/chongyun.png",
+  "Kaeya": "images/characters/kaeya.png",
+  "Qiqi": "images/characters/qiqi.png",
+  "Diona": "images/characters/diona.png",
+  "Rosaria": "images/characters/rosaria.png",
+  "Ganyu": "images/characters/ganyu.png",
+  "Eula": "images/characters/eula.png",
+  "Shenhe": "images/characters/shenhe.png",
+  "Kamisato Ayaka": "images/characters/kamisato-ayaka.png",
+  "Layla": "images/characters/layla.png",
+  "Mika": "images/characters/mika.png",
+  "Wriothesley": "images/characters/wriothesley.png",
+  "Freminet": "images/characters/freminet.png",
+  "Charlotte": "images/characters/charlotte.png",
+  "Escoffier": "images/characters/escoffier.png",
+  "Skirk": "images/characters/skirk.png",
+  "Odette": "images/characters/odette.png",
+  "Citlali": "images/characters/citlali.png",
+  "Aloy": "images/characters/aloy.png",
+  "Sandrone": "images/characters/sandrone.png",
+  "Lohen": "images/characters/lohen.png",
+  "Traveler (Cryo)": "images/characters/traveler.png",
+  "Tighnari": "images/characters/tighnari.png",
+  "Collei": "images/characters/collei.png",
+  "Yaoyao": "images/characters/yaoyao.png",
+  "Kaveh": "images/characters/kaveh.png",
+  "Alhaitham": "images/characters/alhaitham.png",
+  "Nahida": "images/characters/nahida.png",
+  "Baizhu": "images/characters/baizhu.png",
+  "Kirara": "images/characters/kirara.png",
+  "Emilie": "images/characters/emilie.png",
+  "Kinich": "images/characters/kinich.png",
+  "Lauma": "images/characters/lauma.png",
+  "Nefer": "images/characters/nefer.png",
+  "Traveler (Dendro)": "images/characters/traveler.png"
+};
+
+function initials(name){ return name.replace(/[()]/g,'').split(' ').filter(Boolean).map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+function slugify(name){
+  return name.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[()']/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+}
+function itemIconMarkup(name, folder, kind='char'){
+  const image = (kind === 'char' ? ITEM_IMAGES[name] : null) || `${folder}/${slugify(name)}.png`;
+  const fallback = `<span>${initials(name)}</span>`;
+  return image && image.includes('/images/')
+    ? `<div class="mini-icon"><img src="${image}" alt="${name}" loading="lazy"></div>`
+    : `<div class="mini-icon">${fallback}</div>`;
+}
+function resultImageMarkup(name, kind='char', color=null){
+  const image = (kind === 'char' ? ITEM_IMAGES[name] : null) || (
+    kind === 'weapon' ? `images/weapons/${slugify(name)}.png` :
+    kind === 'artifact' ? `images/artifacts/${slugify(name)}.png` : null
+  );
+  const fallback = `<div class="result-icon" ${color ? `style="background:linear-gradient(160deg, ${color}55, ${color}18); border-color:${color};"` : ''}>${initials(name)}</div>`;
+  return image
+    ? `<div class="result-icon"><img src="${image}" alt="${name}" loading="lazy"></div>`
+    : fallback;
+}
+
+// Image-ready toggle card: drop an <img> into .thumb later; toggle logic is independent.
+function makeItemCard(name, owned, color, onToggle){
+  const card = document.createElement('div');
+  card.className = 'item-card' + (owned ? ' on' : '');
+  if(color) card.style.setProperty('--accent', color);
+  const thumb = document.createElement('div');
+  thumb.className = 'thumb';
+  if(color) thumb.style.background = `linear-gradient(160deg, ${color}55, ${color}18)`;
+  thumb.innerHTML = `<span class="ph">${initials(name)}</span><span class="check">✓</span>`;
+  const image = ITEM_IMAGES[name];
+  thumb.innerHTML = `${image
+  ? `<img src="${image}" alt="" loading="lazy">`
+  : `<span class="ph">${initials(name)}</span>`
+  }<span class="check">✓</span>`;
+  const label = document.createElement('div');
+  label.className = 'item-label'; label.textContent = name;
+  card.appendChild(thumb); card.appendChild(label);
+  card.onclick = () => onToggle(card.classList.toggle('on'));
+  return card;
+}
+
+function buildCharGroups(){
+  const host = document.getElementById('chars-groups'); host.innerHTML='';
+  Object.keys(ELEMENTS).forEach(ek=>{
+    const [ename,color]=ELEMENTS[ek];
+    const list = CHARS.filter(c=>c.e===ek);
+    const g = document.createElement('div'); g.className='group';
+    g.innerHTML = `<div class="group-head"><b style="color:${color}">${ename}</b>
+      <span><button class="mini" data-el="${ek}" data-act="on">All</button> <button class="mini" data-el="${ek}" data-act="off">None</button></span></div>
+      <div class="chips"></div>`;
+    host.appendChild(g);
+    const chipsEl = g.querySelector('.chips');
+    list.forEach(c=>chipsEl.appendChild(makeItemCard(c.n, ownedChars.has(c.n), color, on=>{
+      if(on) ownedChars.add(c.n); else ownedChars.delete(c.n);
+      save('tr_chars', ownedChars); updateCounts();
+    })));
+  });
+  host.querySelectorAll('.mini').forEach(btn=>btn.onclick=()=>{
+    CHARS.filter(c=>c.e===btn.dataset.el).forEach(c=>{ if(btn.dataset.act==='on') ownedChars.add(c.n); else ownedChars.delete(c.n); });
+    save('tr_chars', ownedChars); buildCharGroups(); updateCounts();
+  });
+}
+
+function buildWeaponGroups(){
+  const host = document.getElementById('weapons-groups'); host.innerHTML='';
+  Object.keys(WTYPES).forEach(wk=>{
+    const g = document.createElement('div'); g.className='group';
+    g.innerHTML = `<div class="group-head"><b>${WTYPES[wk]}</b>
+      <span><button class="mini" data-w="${wk}" data-act="on">All</button> <button class="mini" data-w="${wk}" data-act="off">None</button></span></div>
+      <div class="chips"></div>`;
+    host.appendChild(g);
+    const chipsEl = g.querySelector('.chips');
+    WEAPONS[wk].forEach(w=>chipsEl.appendChild(makeItemCard(w, ownedWeapons.has(w), null, on=>{
+      if(on) ownedWeapons.add(w); else ownedWeapons.delete(w);
+      save('tr_weapons', ownedWeapons); updateCounts();
+    })));
+  });
+  host.querySelectorAll('.mini').forEach(btn=>btn.onclick=()=>{
+    WEAPONS[btn.dataset.w].forEach(w=>{ if(btn.dataset.act==='on') ownedWeapons.add(w); else ownedWeapons.delete(w); });
+    save('tr_weapons', ownedWeapons); buildWeaponGroups(); updateCounts();
+  });
+}
+
+// Sets that cannot reach 5-star rarity (max 4-star)
+const FOUR_STAR_ONLY = new Set(["Resolution of Sojourner","Brave Heart","Defender's Will","Tiny Miracle","Berserker","Martial Artist","Instructor","Gambler","The Exile","Scholar","Prayers for Illumination","Prayers for Destiny","Prayers for Wisdom","Prayers to Springtime"]);
+const ARTIFACT_GROUPS = [
+  {label:'Up to 5★ sets — by release order', list:ARTIFACTS.filter(a=>!FOUR_STAR_ONLY.has(a))},
+  {label:'4★-only sets — by release order', list:ARTIFACTS.filter(a=>FOUR_STAR_ONLY.has(a))}
+];
+
+function buildArtifactChips(){
+  const host = document.getElementById('artifacts-groups'); host.innerHTML='';
+  ARTIFACT_GROUPS.forEach((grp,gi)=>{
+    const g = document.createElement('div'); g.className='group';
+    g.innerHTML = `<div class="group-head"><b>${grp.label}</b>
+      <span><button class="mini" data-g="${gi}" data-act="on">All</button> <button class="mini" data-g="${gi}" data-act="off">None</button></span></div>
+      <div class="chips"></div>`;
+    host.appendChild(g);
+    const chipsEl = g.querySelector('.chips');
+    grp.list.forEach(a=>chipsEl.appendChild(makeItemCard(a, ownedArtifacts.has(a), null, on=>{
+      if(on) ownedArtifacts.add(a); else ownedArtifacts.delete(a);
+      save('tr_artifacts', ownedArtifacts); updateCounts();
+    })));
+  });
+  host.querySelectorAll('.mini').forEach(btn=>btn.onclick=()=>{
+    ARTIFACT_GROUPS[+btn.dataset.g].list.forEach(a=>{ if(btn.dataset.act==='on') ownedArtifacts.add(a); else ownedArtifacts.delete(a); });
+    save('tr_artifacts', ownedArtifacts); buildArtifactChips(); updateCounts();
+  });
+}
+
+function updateCounts(){
+  const allW = Object.values(WEAPONS).flat();
+  document.getElementById('chars-count').textContent = `${CHARS.filter(c=>ownedChars.has(c.n)).length}/${CHARS.length}`;
+  document.getElementById('weapons-count').textContent = `${allW.filter(w=>ownedWeapons.has(w)).length}/${allW.length}`;
+  document.getElementById('artifacts-count').textContent = `${ARTIFACTS.filter(a=>ownedArtifacts.has(a)).length}/${ARTIFACTS.length}`;
+}
+buildCharGroups(); buildWeaponGroups(); buildArtifactChips(); updateCounts();
+
+let teamSize=4;
+const teamSizeEl = document.getElementById('team-size');
+document.getElementById('team-inc').onclick=()=>{ if(teamSize<4){teamSize++; teamSizeEl.textContent=teamSize;} };
+document.getElementById('team-dec').onclick=()=>{ if(teamSize>1){teamSize--; teamSizeEl.textContent=teamSize;} };
+
+const rnd = arr => arr[Math.floor(Math.random()*arr.length)];
+function pickWeapon(ch){
+  const owned = WEAPONS[ch.w].filter(w=>ownedWeapons.has(w));
+  const pool = owned.length?owned:WEAPONS[ch.w];
+  return {name:rnd(pool), fallback:owned.length===0};
+}
+function pickArtifacts(allowCombo){
+  const owned = ARTIFACTS.filter(a=>ownedArtifacts.has(a));
+  const pool = owned.length?owned:ARTIFACTS;
+  const fallback = owned.length===0;
+  if(allowCombo && pool.length>1 && Math.random()<0.5){
+    const a = rnd(pool); let b; do{ b = rnd(pool); }while(b===a);
+    return {sets:[a+' (2pc)', b+' (2pc)'], fallback};
+  }
+  return {sets:[rnd(pool)+' (4pc)'], fallback};
+}
+
+document.getElementById('roll-btn').onclick=()=>{
+  const msg = document.getElementById('msg'), results = document.getElementById('results');
+  msg.textContent=''; results.innerHTML='';
+  const pool = CHARS.filter(c=>ownedChars.has(c.n));
+  const allowCombo = document.getElementById('combo-toggle').checked;
+  if(pool.length===0){ msg.textContent='Select at least one owned character first.'; return; }
+  let working = [...pool];
+  const team=[];
+  for(let i=0;i<teamSize && working.length;i++){
+    const idx = Math.floor(Math.random()*working.length);
+    const picked = working[idx];
+    team.push(picked);
+    working.splice(idx,1);
+    // Only one Traveler element per team
+    if(picked.g==='trav') working = working.filter(c=>c.g!=='trav');
+  }
+  if(team.length<teamSize) msg.textContent=`Only ${team.length} valid character(s) available for this roll — select more owned characters.`;
+  team.forEach(ch=>{
+    const [ename,color] = ELEMENTS[ch.e];
+    const wpn = pickWeapon(ch), art = pickArtifacts(allowCombo);
+    const card = document.createElement('div');
+    card.className='result-card'; card.style.setProperty('--elc', color);
+    card.innerHTML = `
+      <div class="result-head">
+        ${resultImageMarkup(ch.n, 'char', color)}
+        <div>
+          <h3>${ch.n}</h3>
+          <div class="elem">${ename} · ${WTYPES[ch.w]}</div>
+        </div>
+      </div>
+      <div class="row">
+        <span class="label">Weapon</span>
+        <span class="result-item">${resultImageMarkup(wpn.name, 'weapon')}<b>${wpn.name}</b></span>
+      </div>
+      <div class="row">
+        <span class="label">Artifacts</span>
+        <span class="result-item">${art.sets.map(a => `${resultImageMarkup(a.replace(/ \(2pc\)| \(4pc\)$/,''), 'artifact')}<b>${a}</b>`).join('</span><span class="result-item">')}</span>
+      </div>
+      ${(wpn.fallback||art.fallback)?'<div class="note">Not marked as owned — picked from full pool</div>':''}`;
+    results.appendChild(card);
+  });
+};
+</script>
+</body>
+</html>
