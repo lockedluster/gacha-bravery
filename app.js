@@ -270,29 +270,20 @@ function buildResultCard(ch, wpn, art) {
   card.style.setProperty('--elc', color);
 
   const head = document.createElement('div');
-  head.className = 'result-head';
+  head.className = 'result-head result-character';
   head.innerHTML = `${resultImageMarkup(ch.n, 'char', color)}<div><h3>${ch.n}</h3><div class="elem">${ename} · ${WTYPES[ch.w]}</div></div>`;
   card.appendChild(head);
 
   const weaponRow = document.createElement('div');
-  weaponRow.className = 'row';
-  const weaponLabel = document.createElement('span');
-  weaponLabel.className = 'label';
-  weaponLabel.textContent = 'Weapon';
-  const weaponItem = makeResultItem(wpn.name, 'weapon');
-  weaponRow.appendChild(weaponLabel);
-  weaponRow.appendChild(weaponItem);
+  weaponRow.className = 'result-section weapon-result';
+  weaponRow.appendChild(makeResultItem(wpn.name, 'weapon'));
   card.appendChild(weaponRow);
 
   const artifactRow = document.createElement('div');
-  artifactRow.className = 'row';
-  const artifactLabel = document.createElement('span');
-  artifactLabel.className = 'label';
-  artifactLabel.textContent = 'Artifacts';
-  artifactRow.appendChild(artifactLabel);
+  artifactRow.className = 'result-section artifact-result';
 
   const artifactGroup = document.createElement('div');
-  artifactGroup.className = 'result-item';
+  artifactGroup.className = 'artifact-group';
   const items = art.sets.map(setName => {
     const clean = setName.replace(/ \(2pc\)| \(4pc\)$/, '');
     const row = document.createElement('span');
