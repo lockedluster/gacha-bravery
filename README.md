@@ -9,4 +9,5 @@
 
 ## TODO
 ~~Add artifact and weapon icons to /images~~
-Make it mobile friendly
+
+Make it mobile-friendly
