@@ -8,4 +8,4 @@
 * Toggle to enable 2pc + 2pc artifact combinations 
 
 ## TODO
-Add ~~artifact and~~ weapon icons to /images
+~~Add artifact and weapon icons to /images~~
