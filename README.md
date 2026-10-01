@@ -8,6 +8,5 @@
 * Toggle to enable 2pc + 2pc artifact combinations 
 
 ## TODO
-~~Add artifact and weapon icons to /images~~
-
-Make it mobile-friendly
+* ~~Add artifact and weapon icons to /images~~
+* ~~Make it mobile-friendly~~
