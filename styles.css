@@ -24,7 +24,7 @@
 *{box-sizing:border-box;}
 html{scroll-padding-top:env(safe-area-inset-top,0px);}
 body{margin:0; background:var(--bg); color:var(--text); font-family:'Manrope',system-ui,sans-serif; min-height:100%; padding:28px 18px 60px;}
-.wrap{max-width:1100px; margin:0 auto;}
+.wrap{max-width:800px; margin:0 auto;}
 header{text-align:center; margin-bottom:28px;}
 h1{font-family:'HYWenHei',serif; font-weight:700; letter-spacing:.02em; font-size:clamp(28px,6vw,40px); margin:0 0 6px; color:var(--gold);}
 header p{color:var(--muted); margin:0; font-size:15px;}
@@ -55,24 +55,30 @@ details[open] summary::after{transform:rotate(180deg);}
 .roll-btn{display:block; margin:0 auto 30px; font-family:'HYWenHei',serif; font-weight:700; font-size:18px; letter-spacing:.03em; background:var(--gold); color:#1a1408; border:none; padding:14px 40px; border-radius:30px; cursor:pointer; box-shadow:0 6px 18px var(--gold-soft);}
 .roll-btn:active{transform:translateY(1px);}
 #msg{text-align:center; color:var(--muted); font-size:14px; min-height:20px; margin-bottom:10px;}
-#results{display:flex; flex-wrap:wrap; justify-content:center; gap:14px;}
-.result-card{background:var(--surface); border:1px solid var(--line); border-top:4px solid var(--elc,var(--gold)); border-radius:12px; padding:16px 10px; min-width:0; width:calc((100% - 42px) / 4); height:620px; display:flex; flex-direction:column; align-items:center; position:relative;}
-.result-card .result-head{display:flex; flex-direction:column; align-items:center; gap:8px; width:100%; height:190px; flex-shrink:0; text-align:center;}
+#results{display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:14px;}
+.result-card{background:var(--surface); border:1px solid var(--line); border-top:4px solid var(--elc,var(--gold)); border-radius:12px; padding:16px 10px; min-width:0; width:100%; height:550px; display:flex; flex-direction:column; align-items:center; position:relative;}
+.result-card.combo-result{height:550px;}
+.result-card .result-head{display:flex; flex-direction:column; align-items:center; gap:6px; width:100%; height:125px; flex-shrink:0; text-align:center;}
 .result-card .result-icon{width:100%; aspect-ratio:1; height:auto; border-radius:10px; overflow:hidden; border:1px solid var(--line); background:var(--surface2); display:flex; align-items:center; justify-content:center; font-family:'HYWenHei',serif; font-size:12px; font-weight:700; color:var(--text); text-transform:uppercase; flex-shrink:0;}
-.result-card .result-head .result-icon{max-width:130px;}
+.result-card .result-head .result-icon{max-width:104px;}
 .result-card .result-icon img{width:100%; height:100%; object-fit:cover; display:block;}
-.result-card h3{margin:0 0 2px; font-family:'HYWenHei',serif; font-size:19px;}
-.result-card .elem{font-size:12px; color:var(--elc,var(--muted)); font-weight:700; letter-spacing:.04em; margin-bottom:12px;}
+.result-card h3{margin:0 0 2px; font-family:'HYWenHei',serif; font-size:15px;}
+.result-card .elem{font-size:10px; color:var(--elc,var(--muted)); font-weight:700; letter-spacing:.04em; margin-bottom:10px;}
 .result-card .result-section{width:100%; display:flex; justify-content:center; text-align:center;}
-.result-card .weapon-result{height:250px; flex-shrink:0; align-items:center;}
+.result-card .weapon-result{height:220px; flex-shrink:0; align-items:center;}
 .result-card .artifact-result{height:140px; flex-shrink:0; align-items:flex-end; padding-bottom:18px;}
-.result-card .result-item{display:flex; flex-direction:column; align-items:center; gap:6px; min-height:22px; max-width:100%; color:var(--text); font-size:11px; word-break:break-word;}
+.result-card.combo-result .weapon-result{height:175px;}
+.result-card.combo-result .artifact-result{height:210px; align-items:center; padding-bottom:0;}
+.result-card .result-item{display:flex; flex-direction:column; align-items:center; gap:6px; min-height:22px; max-width:100%; color:var(--text); font-size:11px; overflow-wrap:anywhere;}
 .result-card .result-item b{font-weight:600; line-height:1.2; min-height:27px; display:flex; align-items:flex-start; justify-content:center;}
 .result-card .weapon-result .result-item{width:100%;}
 .result-card .weapon-result .result-icon{max-width:104px;}
 .result-card .artifact-group{display:flex; justify-content:center; gap:6px; width:100%;}
 .result-card .artifact-group .result-item{width:calc(50% - 3px);}
-.result-card .artifact-group .result-icon{max-width:76px;}
+.result-card .artifact-group .result-icon{max-width:104px;}
+.result-card .artifact-group.combo{flex-direction:column; align-items:center; gap:5px;}
+.result-card .artifact-group.combo .result-item{width:100%;}
+.result-card .artifact-group.combo .result-icon{max-width:68px;}
 .result-card .result-item .mini-icon{width:20px; height:20px; border-radius:6px; object-fit:cover; display:flex; align-items:center; justify-content:center; background:var(--surface2); border:1px solid var(--line); font-size:8px; color:var(--text); font-family:'HYWenHei',serif; overflow:hidden; flex-shrink:0;}
 .result-card .result-item .mini-icon img{width:100%; height:100%; object-fit:cover; display:block;}
 .result-card .note{position:absolute; left:10px; right:10px; bottom:6px; font-size:11px; color:var(--gold); text-align:center;}

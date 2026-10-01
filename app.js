@@ -266,12 +266,12 @@ function makeResultItem(name, kind = 'char') {
 function buildResultCard(ch, wpn, art) {
   const [ename, color] = ELEMENTS[ch.e];
   const card = document.createElement('div');
-  card.className = 'result-card';
+  card.className = `result-card${art.sets.length > 1 ? ' combo-result' : ''}`;
   card.style.setProperty('--elc', color);
 
   const head = document.createElement('div');
   head.className = 'result-head result-character';
-  head.innerHTML = `${resultImageMarkup(ch.n, 'char', color)}<div><h3>${ch.n}</h3><div class="elem">${ename} · ${WTYPES[ch.w]}</div></div>`;
+  head.innerHTML = `${resultImageMarkup(ch.n, 'char', color)}<div><h3>${ch.n}</h3></div>`;
   card.appendChild(head);
 
   const weaponRow = document.createElement('div');
@@ -283,7 +283,7 @@ function buildResultCard(ch, wpn, art) {
   artifactRow.className = 'result-section artifact-result';
 
   const artifactGroup = document.createElement('div');
-  artifactGroup.className = 'artifact-group';
+  artifactGroup.className = `artifact-group${art.sets.length > 1 ? ' combo' : ''}`;
   const items = art.sets.map(setName => {
     const clean = setName.replace(/ \(2pc\)| \(4pc\)$/, '');
     const row = document.createElement('span');
