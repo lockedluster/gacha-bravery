@@ -1,6 +1,10 @@
 const CHAR_NAME_SET = new Set(CHARS.map(c => c.n));
 const ARTIFACT_NAME_SET = new Set(ARTIFACTS);
 
+document.querySelectorAll('details').forEach(detail => {
+  detail.removeAttribute('open');
+});
+
 let ownedChars, ownedWeapons, ownedArtifacts;
 
 function load(key, all) {

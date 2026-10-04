@@ -138,7 +138,7 @@ M:["A Thousand Floating Dreams","Angelos' Heptades","Apprentice's Notes","Ash-Gr
 };
 Object.keys(WEAPONS).forEach(k => WEAPONS[k].sort((a, b) => a.localeCompare(b)));
 
-const ARTIFACTS = ["Resolution of Sojourner","Brave Heart","Defender's Will","Tiny Miracle","Berserker","Martial Artist","Instructor","Gambler","The Exile","Scholar","Blizzard Strayer","Thundersoother","Lavawalker","Maiden Beloved","Gladiator's Finale","Viridescent Venerer","Wanderer's Troupe","Thundering Fury","Crimson Witch of Flames","Noblesse Oblige","Bloodstained Chivalry","Prayers for Illumination","Prayers for Destiny","Prayers for Wisdom","Prayers to Springtime","Archaic Petra","Retracing Bolide","Heart of Depth","Tenacity of the Millelith","Pale Flame","Shimenawa's Reminiscence","Emblem of Severed Fate","Husk of Opulent Dreams","Ocean-Hued Clam","Vermillion Hereafter","Echoes of an Offering","Deepwood Memories","Gilded Dreams","Desert Pavilion Chronicle","Flower of Paradise Lost","Nymph's Dream","Vourukasha's Glow","Marechaussee Hunter","Golden Troupe","Song of Days Past","Nighttime Whispers in the Echoing Woods","Fragment of Harmonic Whimsy","Unfinished Reverie","Scroll of the Hero of Cinder City","Obsidian Codex","Long Night's Oath","Finale of the Deep Galleries","Night of the Sky's Unveiling","Silken Moon's Serenade","Aubade of Morningstar and Moon","A Day Carved From Rising Winds","Celestial Gift","Disenchantment in Deep Shadow","Scarlet Proof","Heart of the Furnace"];
+const ARTIFACTS = ["Resolution of Sojourner","Brave Heart","Defender's Will","Tiny Miracle","Berserker","Martial Artist","Instructor","Gambler","The Exile","Scholar","Blizzard Strayer","Thundersoother","Lavawalker","Maiden Beloved","Gladiator's Finale","Viridescent Venerer","Wanderer's Troupe","Thundering Fury","Crimson Witch of Flames","Noblesse Oblige","Bloodstained Chivalry","Archaic Petra","Retracing Bolide","Heart of Depth","Tenacity of the Millelith","Pale Flame","Shimenawa's Reminiscence","Emblem of Severed Fate","Husk of Opulent Dreams","Ocean-Hued Clam","Vermillion Hereafter","Echoes of an Offering","Deepwood Memories","Gilded Dreams","Desert Pavilion Chronicle","Flower of Paradise Lost","Nymph's Dream","Vourukasha's Glow","Marechaussee Hunter","Golden Troupe","Song of Days Past","Nighttime Whispers in the Echoing Woods","Fragment of Harmonic Whimsy","Unfinished Reverie","Scroll of the Hero of Cinder City","Obsidian Codex","Long Night's Oath","Finale of the Deep Galleries","Night of the Sky's Unveiling","Silken Moon's Serenade","Aubade of Morningstar and Moon","A Day Carved From Rising Winds","Celestial Gift","Disenchantment in Deep Shadow","Scarlet Proof","Heart of the Furnace"];
 
 const CHARS = CHAR_TXT.trim().split("\n").map(line => {
   const [n, e, w, g] = line.split("|");
@@ -170,7 +170,7 @@ const ITEM_IMAGES = {
 };
 
 const FOUR_STAR_ONLY = new Set([
-  "Resolution of Sojourner","Brave Heart","Defender's Will","Tiny Miracle","Berserker","Martial Artist","Instructor","Gambler","The Exile","Scholar","Prayers for Illumination","Prayers for Destiny","Prayers for Wisdom","Prayers to Springtime"
+  "Resolution of Sojourner","Brave Heart","Defender's Will","Tiny Miracle","Berserker","Martial Artist","Instructor","Gambler","The Exile","Scholar"
 ]);
 
 const ARTIFACT_GROUPS = [
