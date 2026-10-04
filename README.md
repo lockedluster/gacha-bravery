@@ -10,3 +10,8 @@
 ## TODO
 * ~~Add artifact and weapon icons to /images~~
 * ~~Make it mobile-friendly~~
+
+## Changelog
+* 4/10/2026
+  * Made UI cleaner
+  * Removed 4-Star "Prayers" sets
