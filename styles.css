@@ -58,7 +58,9 @@ details[open] summary::after{transform:rotate(180deg);}
 .roll-btn:active{transform:translateY(1px);}
 #msg{text-align:center; color:var(--muted); font-size:14px; min-height:20px; margin-bottom:10px;}
 #results{display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,max-content)); gap:14px; justify-content:center;}
-.result-card{background:var(--surface); border:1px solid var(--line); border-top:4px solid var(--elc,var(--gold)); border-radius:12px; padding:16px 10px; min-width:0; width:175px; max-width:100%; height:550px; display:flex; flex-direction:column; align-items:center; position:relative;}
+.result-card{background:var(--surface); border:1px solid var(--line); border-top:4px solid var(--elc,var(--gold)); border-radius:12px; padding:16px 10px; min-width:0; width:175px; max-width:100%; height:550px; display:flex; flex-direction:column; align-items:center; position:relative; animation:result-card-reveal .42s cubic-bezier(.2,.75,.3,1) both; animation-delay:var(--reveal-delay,0ms);}
+@keyframes result-card-reveal{from{opacity:0; transform:translateY(14px) scale(.97);}to{opacity:1; transform:translateY(0) scale(1);}}
+@media (prefers-reduced-motion:reduce){.result-card{animation:none;}}
 .result-card.combo-result{height:550px;}
 .result-card .result-head{display:flex; flex-direction:column; align-items:center; gap:6px; width:100%; height:125px; flex-shrink:0; text-align:center;}
 .result-card .result-icon{width:100%; aspect-ratio:1; height:auto; border-radius:10px; overflow:hidden; border:1px solid var(--line); background:var(--surface2); display:flex; align-items:center; justify-content:center; font-family:'HYWenHei',serif; font-size:12px; font-weight:700; color:var(--text); text-transform:uppercase; flex-shrink:0;}

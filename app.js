@@ -337,10 +337,12 @@ DOM.rollBtn.onclick = () => {
     DOM.msg.textContent = `Only ${team.length} valid character(s) available for this roll — select more owned characters.`;
   }
 
-  team.forEach(ch => {
+  team.forEach((ch, index) => {
     const wpn = pickWeapon(ch);
     const art = pickArtifacts(allowCombo);
-    DOM.results.appendChild(buildResultCard(ch, wpn, art));
+    const card = buildResultCard(ch, wpn, art);
+    card.style.setProperty('--reveal-delay', `${index * 90}ms`);
+    DOM.results.appendChild(card);
   });
 };
 
