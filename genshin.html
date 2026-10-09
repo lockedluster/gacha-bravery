@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Genshin Bravery</title>
+<link rel="icon" type="image/png" href="images/characters/tartaglia.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<button class="sidebar-toggle" type="button" aria-label="Open game menu" aria-controls="game-sidebar" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+<aside class="game-sidebar" id="game-sidebar" aria-label="Game options" aria-hidden="true" inert>
+  <h2>Games</h2>
+  <nav>
+    <a class="game-link" href="index.html">Home</a>
+    <a class="game-link" href="genshin.html">Genshin Impact</a>
+    <button class="game-link" type="button" disabled aria-label="Honkai: Star Rail, unavailable">
+      Honkai: Star Rail
+    </button>
+    <button class="game-link" type="button" disabled aria-label="Zenless Zone Zero, unavailable">
+      Zenless Zone Zero
+    </button>
+    <button class="game-link" type="button" disabled aria-label="Wuthering Waves, unavailable">
+      Wuthering Waves
+    </button>
+  </nav>
+</aside>
+<div class="wrap">
+<header>
+  <h1>Genshin Impact</h1>
+</header>
+
+<div class="card"><details id="det-chars"><summary>Owned Characters <span class="count" id="chars-count"></span></summary><div id="chars-groups"></div></details></div>
+<div class="card"><details id="det-weapons"><summary>Owned Weapons <span class="count" id="weapons-count"></span></summary><div id="weapons-groups"></div></details></div>
+<div class="card"><details id="det-artifacts"><summary>Owned Artifact Sets <span class="count" id="artifacts-count"></span></summary><div id="artifacts-groups"></div></details></div>
+
+<div class="controls">
+  <div class="stepper"><button id="team-dec">−</button><span id="team-size">4</span> characters<button id="team-inc">+</button></div>
+  <label class="toggle-row"><input type="checkbox" id="combo-toggle"> allow 2pc+2pc combinations</label>
+</div>
+
+<button class="roll-btn" id="roll-btn">🎲 Roll</button>
+<div id="msg"></div>
+<div id="results"></div>
+
+<footer class="landing-footer">This site is not affiliated with or endorsed by HoYoverse.</footer>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="sidebar.js"></script>
+</body>
+</html>
