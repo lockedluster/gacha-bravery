@@ -9,7 +9,8 @@
 ## TODO
 * ~~Add artifact and weapon icons to /images~~
 * ~~Make it mobile-friendly~~
-* Add other gacha games into the site 
+* Add other gacha games into the site
+* Properly format and put stuff into the landing page
 
 ## Changelog
 * 10/10/26
