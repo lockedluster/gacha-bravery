@@ -216,6 +216,7 @@ const DOM = {
   teamSize: document.getElementById('team-size'),
   msg: document.getElementById('msg'),
   results: document.getElementById('results'),
+  history: document.getElementById('roll-history'),
   comboToggle: document.getElementById('combo-toggle'),
   rollBtn: document.getElementById('roll-btn'),
   teamInc: document.getElementById('team-inc'),
@@ -238,6 +239,58 @@ DOM.teamDec.onclick = () => {
 };
 
 const rnd = arr => arr[Math.floor(Math.random() * arr.length)];
+
+function renderRollResults(roll) {
+  DOM.results.replaceChildren();
+  roll.forEach(({ character, weapon, artifacts }, index) => {
+    const card = buildResultCard(character, weapon, artifacts);
+    card.style.setProperty('--reveal-delay', `${index * 90}ms`);
+    DOM.results.appendChild(card);
+  });
+}
+
+function addRollToHistory(roll) {
+  const emptyMessage = DOM.history.querySelector('.history-empty');
+  if (emptyMessage) emptyMessage.remove();
+
+  const entry = document.createElement('li');
+  entry.className = 'history-entry';
+
+  const rollNumber = DOM.history.querySelectorAll('.history-entry').length + 1;
+  const button = document.createElement('button');
+  button.className = 'history-roll';
+  button.type = 'button';
+  button.setAttribute('aria-label', `Show roll ${rollNumber}: ${roll.map(result => result.character.n).join(', ')}`);
+  button.setAttribute('aria-current', 'true');
+  const characters = document.createElement('div');
+  characters.className = 'history-characters';
+  roll.forEach(({ character }) => {
+    const avatar = document.createElement('span');
+    avatar.className = 'history-avatar';
+    const imagePath = getItemImagePath(character.n, 'char');
+    if (imagePath) {
+      const image = document.createElement('img');
+      image.src = imagePath;
+      image.alt = character.n;
+      image.loading = 'lazy';
+      avatar.appendChild(image);
+    } else {
+      avatar.textContent = initials(character.n);
+      avatar.setAttribute('aria-label', character.n);
+    }
+    characters.appendChild(avatar);
+  });
+  button.appendChild(characters);
+  button.addEventListener('click', () => {
+    DOM.history.querySelectorAll('.history-roll').forEach(item => item.removeAttribute('aria-current'));
+    button.setAttribute('aria-current', 'true');
+    DOM.msg.textContent = '';
+    renderRollResults(roll);
+  });
+  DOM.history.querySelectorAll('.history-roll').forEach(item => item.removeAttribute('aria-current'));
+  entry.appendChild(button);
+  DOM.history.prepend(entry);
+}
 
 function pickWeapon(ch) {
   const owned = WEAPONS[ch.w].filter(w => ownedWeapons.has(w));
@@ -337,13 +390,14 @@ DOM.rollBtn.onclick = () => {
     DOM.msg.textContent = `Only ${team.length} valid character(s) available for this roll — select more owned characters.`;
   }
 
-  team.forEach((ch, index) => {
+  const roll = team.map(ch => {
     const wpn = pickWeapon(ch);
     const art = pickArtifacts(allowCombo);
-    const card = buildResultCard(ch, wpn, art);
-    card.style.setProperty('--reveal-delay', `${index * 90}ms`);
-    DOM.results.appendChild(card);
+    return { character: ch, weapon: wpn, artifacts: art };
   });
+
+  renderRollResults(roll);
+  addRollToHistory(roll);
 };
 
 buildCharGroups();

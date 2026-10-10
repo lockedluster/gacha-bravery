@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Genshin Bravery</title>
+<title>Gacha Bravery</title>
 <link rel="icon" type="image/png" href="images/characters/tartaglia.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,11 +14,11 @@
 <button class="sidebar-toggle" type="button" aria-label="Open game menu" aria-controls="game-sidebar" aria-expanded="false">
   <span></span><span></span><span></span>
 </button>
+<a class="brand-link" href="index.html">Gacha Bravery</a>
 <aside class="game-sidebar" id="game-sidebar" aria-label="Game options" aria-hidden="true" inert>
   <h2>Games</h2>
   <nav>
-    <a class="game-link" href="index.html">Home</a>
-    <a class="game-link" href="genshin.html">Genshin Impact</a>
+    <button class="game-link" type="button" disabled aria-current="page">Genshin Impact</button>
     <button class="game-link" type="button" disabled aria-label="Honkai: Star Rail, unavailable">
       Honkai: Star Rail
     </button>
@@ -31,6 +31,8 @@
   </nav>
 </aside>
 <div class="wrap">
+<div class="genshin-layout">
+<main class="genshin-main">
 <header>
   <h1>Genshin Impact</h1>
 </header>
@@ -47,6 +49,17 @@
 <button class="roll-btn" id="roll-btn">🎲 Roll</button>
 <div id="msg"></div>
 <div id="results"></div>
+</main>
+
+<aside class="roll-history card" aria-labelledby="history-title">
+  <div class="history-heading">
+    <h2 id="history-title">Roll History</h2>
+  </div>
+  <ol id="roll-history" aria-live="polite">
+    <li class="history-empty">Your rolls will appear here.</li>
+  </ol>
+</aside>
+</div>
 
 <footer class="landing-footer">This site is not affiliated with or endorsed by HoYoverse.</footer>
 </div>

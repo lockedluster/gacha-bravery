@@ -31,6 +31,19 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px);}
 body{margin:0; background:var(--bg); color:var(--text); font-family:'Manrope',system-ui,sans-serif; min-height:100%; padding:28px 18px 60px;}
 .wrap{max-width:1100px; margin:0 auto;}
+.genshin-layout{display:grid; grid-template-columns:minmax(0,1fr) 270px; gap:22px; align-items:start;}
+.genshin-main{min-width:0;}
+.roll-history{position:sticky; top:18px; max-height:calc(100vh - 36px); overflow:auto; padding:14px;}
+.history-heading{display:flex; align-items:center; justify-content:center; padding-bottom:11px; border-bottom:1px solid var(--line); text-align:center;}
+.history-heading h2{margin:0; font-family:'HYWenHei',serif; font-size:17px;}
+#roll-history{display:grid; gap:10px; margin:0; padding:12px 0 0; list-style:none;}
+.history-empty{padding:16px 4px; color:var(--muted); font-size:12px; text-align:center;}
+.history-entry{min-width:0;}
+.history-roll{display:block; width:100%; padding:7px; border:1px solid var(--line); border-radius:6px; background:var(--surface2); cursor:pointer;}
+.history-roll:hover,.history-roll:focus-visible,.history-roll[aria-current="true"]{border-color:var(--gold); outline-color:var(--gold);}
+.history-characters{display:flex; align-items:center; justify-content:center; gap:6px; min-width:0;}
+.history-avatar{display:flex; width:42px; aspect-ratio:1; flex:0 0 42px; align-items:center; justify-content:center; overflow:hidden; border:1px solid var(--line); border-radius:5px; background:var(--surface); color:var(--muted); font:700 11px 'HYWenHei',serif;}
+.history-avatar img{display:block; width:100%; height:100%; object-fit:cover;}
 header{text-align:center; margin-bottom:28px;}
 .repo-badge{display:inline-flex; align-items:center; justify-content:center; padding:7px 12px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--gold); text-decoration:none; font-size:12px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; transition:all .15s ease;}
 .repo-badge:hover,.repo-badge:focus-visible{background:var(--surface2); border-color:var(--gold); text-decoration:none; transform:translateY(-1px);}
@@ -63,9 +76,9 @@ details[open] summary::after{transform:rotate(180deg);}
 .stepper button{width:26px; height:26px; border-radius:50%; border:1px solid var(--line); background:var(--surface2); color:var(--text); font-size:15px; cursor:pointer;}
 .toggle-row{display:flex; align-items:center; gap:7px; font-size:13px; color:var(--muted);}
 .toggle-row input{accent-color:var(--gold);}
-.roll-btn{display:block; margin:0 auto 30px; font-family:'HYWenHei',serif; font-weight:700; font-size:18px; letter-spacing:.03em; background:var(--gold); color:#1a1408; border:none; padding:14px 40px; border-radius:30px; cursor:pointer; box-shadow:0 6px 18px var(--gold-soft);}
+.roll-btn{display:block; margin:0 auto 20px; font-family:'HYWenHei',serif; font-weight:700; font-size:18px; letter-spacing:.03em; background:var(--gold); color:#1a1408; border:none; padding:14px 40px; border-radius:30px; cursor:pointer; box-shadow:0 6px 18px var(--gold-soft);}
 .roll-btn:active{transform:translateY(1px);}
-#msg{text-align:center; color:var(--muted); font-size:14px; min-height:20px; margin-bottom:10px;}
+#msg{text-align:center; color:var(--muted); font-size:14px; min-height:15px; margin-bottom:10px;}
 #results{display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,max-content)); gap:14px; justify-content:center;}
 .result-card{background:var(--surface); border:1px solid var(--line); border-top:4px solid var(--elc,var(--gold)); border-radius:12px; padding:16px 10px; min-width:0; width:175px; max-width:100%; height:550px; display:flex; flex-direction:column; align-items:center; position:relative; animation:result-card-reveal .42s cubic-bezier(.2,.75,.3,1) both; animation-delay:var(--reveal-delay,0ms);}
 @keyframes result-card-reveal{from{opacity:0; transform:translateY(14px) scale(.97);}to{opacity:1; transform:translateY(0) scale(1);}}
@@ -104,6 +117,8 @@ footer:last-child{margin-top:12px;}
 .sidebar-toggle{position:fixed; z-index:30; top:14px; left:14px; display:grid; align-content:center; justify-items:center; gap:5px; width:44px; height:44px; padding:0; border:1px solid var(--line); border-radius:6px; background:var(--surface); color:var(--text); cursor:pointer;}
 .sidebar-toggle span{width:20px; height:2px; border-radius:1px; background:currentColor;}
 .sidebar-toggle:hover,.sidebar-toggle:focus-visible{border-color:var(--gold); outline-color:var(--gold);}
+.brand-link{position:fixed; z-index:30; top:14px; left:68px; display:flex; min-height:44px; align-items:center; color:var(--gold); font:400 20px 'FOT-Yuruka Std','HYWenHei',serif; text-decoration:none;}
+.brand-link:hover,.brand-link:focus-visible{color:var(--text); text-decoration:none; outline-color:var(--gold);}
 .game-sidebar h2{margin:0 0 22px; color:var(--muted); font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;}
 .game-sidebar nav{display:grid; gap:8px;}
 .game-link{display:flex; align-items:center; width:100%; min-height:46px; padding:0 13px; border:1px solid transparent; border-radius:6px; background:transparent; color:var(--text); font:600 14px 'Manrope',system-ui,sans-serif; text-align:left; text-decoration:none; cursor:pointer;}
@@ -111,6 +126,7 @@ footer:last-child{margin-top:12px;}
 .game-link:disabled{color:var(--muted); cursor:not-allowed; opacity:.6;}
 .landing-main{display:flex; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:16px; min-width:0; min-height:0; padding:32px;}
 .landing-main h1{font-family:'FOT-Yuruka Std',serif; font-weight:400; margin:0; text-align:center; font-size:clamp(32px,6vw,56px);}
+.landing-description{max-width:620px; margin:-10px 0 0; color:var(--muted); font-size:16px; line-height:1.65; text-align:center;}
 .landing-footer{display:flex; align-items:center; justify-content:center; gap:16px; width:100%; margin:0; padding:16px 24px max(16px,env(safe-area-inset-bottom,0px)); color:var(--muted); font-size:12px; line-height:1.6; text-align:center;}
 .landing-footer a{color:var(--gold); text-underline-offset:3px;}
 .landing-footer a:hover,.landing-footer a:focus-visible{color:var(--text);}
@@ -120,4 +136,11 @@ footer:last-child{margin-top:12px;}
   .landing-footer{padding-right:16px; padding-left:16px;}
 }
 body:not(.landing-page) .wrap{padding-top:40px;}
+@media(max-width:900px){
+  .genshin-layout{grid-template-columns:minmax(0,1fr) 230px; gap:14px;}
+}
+@media(max-width:680px){
+  .genshin-layout{grid-template-columns:1fr;}
+  .roll-history{position:static; max-height:340px;}
+}
 @media(prefers-reduced-motion:reduce){.game-sidebar{transition:none;}}
