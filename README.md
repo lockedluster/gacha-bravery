@@ -13,6 +13,10 @@
 * Properly format and put stuff into the landing page
 
 ## Changelog
+* 10/10/26 v2
+  * Added roll history
+  * Added the name of the project beside the sidebar icon
+
 * 10/10/26
   * Made a simple landing page
   * Added a sidebar for future additions
