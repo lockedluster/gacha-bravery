@@ -1,6 +1,6 @@
 # Gacha Bravery
 
-> Inspired by Ultimate Bravery from LoL, where every part of your character or team loadout is random, including equipment, weapons, and the characters themselves.
+> Inspired by Ultimate Bravery from LoL. A Randomizer++ for Genshin Impact, Wuthering Waves, etc., where every part of your character or team loadout is random, including equipment, weapons, and the characters themselves.
 
 ## Features
 
