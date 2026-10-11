@@ -13,6 +13,9 @@
 * Properly format and put stuff into the landing page
 
 ## Changelog
+* 12/10/26
+  * Added an icon for the landing page and changed the favicon
+
 * 10/10/26 v2
   * Added roll history
   * Added the name of the project beside the sidebar icon
