@@ -125,6 +125,7 @@ footer:last-child{margin-top:12px;}
 .game-link[href]:hover,.game-link[href]:focus-visible{background:var(--surface2); border-color:var(--line);}
 .game-link:disabled{color:var(--muted); cursor:not-allowed; opacity:.6;}
 .landing-main{display:flex; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:16px; min-width:0; min-height:0; padding:32px;}
+.landing-logo{width:150px; height:150px; object-fit:contain;}
 .landing-main h1{font-family:'FOT-Yuruka Std',serif; font-weight:400; margin:0; text-align:center; font-size:clamp(32px,6vw,56px);}
 .landing-description{max-width:620px; margin:-10px 0 0; color:var(--muted); font-size:16px; line-height:1.65; text-align:center;}
 .landing-footer{display:flex; align-items:center; justify-content:center; gap:16px; width:100%; margin:0; padding:16px 24px max(16px,env(safe-area-inset-bottom,0px)); color:var(--muted); font-size:12px; line-height:1.6; text-align:center;}
