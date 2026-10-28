@@ -13,6 +13,7 @@
 :root{
   --bg:#12141c; --surface:#191c27; --surface2:#212533; --line:#2c3040;
   --text:#eae7dc; --muted:#9296a8; --gold:#caa452; --gold-soft:#caa45233;
+  color-scheme:dark;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
@@ -21,11 +22,17 @@
   :root:not([data-theme="dark"]){
     --bg:#f3efe4; --surface:#ffffff; --surface2:#f0ece0; --line:#ddd6c3;
     --text:#232014; --muted:#726d5c; --gold:#a5772b; --gold-soft:#a5772b22;
+    color-scheme:light;
   }
 }
 :root[data-theme="dark"]{
   --bg:#12141c; --surface:#191c27; --surface2:#212533; --line:#2c3040;
   --text:#eae7dc; --muted:#9296a8; --gold:#caa452; --gold-soft:#caa45233;
+}
+:root[data-theme="light"]{
+  --bg:#f3efe4; --surface:#ffffff; --surface2:#f0ece0; --line:#ddd6c3;
+  --text:#232014; --muted:#726d5c; --gold:#a5772b; --gold-soft:#a5772b22;
+  color-scheme:light;
 }
 *{box-sizing:border-box;}
 html{scroll-padding-top:env(safe-area-inset-top,0px);}
@@ -119,15 +126,34 @@ footer:last-child{margin-top:12px;}
 .sidebar-toggle:hover,.sidebar-toggle:focus-visible{border-color:var(--gold); outline-color:var(--gold);}
 .brand-link{position:fixed; z-index:30; top:14px; left:68px; display:flex; min-height:44px; align-items:center; color:var(--gold); font:400 20px 'FOT-Yuruka Std','HYWenHei',serif; text-decoration:none;}
 .brand-link:hover,.brand-link:focus-visible{color:var(--text); text-decoration:none; outline-color:var(--gold);}
+.topbar-divider{position:fixed; z-index:25; top:68px; right:0; left:0; border-top:1px solid var(--line); pointer-events:none;}
+.theme-toggle{position:fixed; z-index:30; top:14px; right:14px; display:flex; width:44px; height:44px; align-items:center; justify-content:center; padding:0; border:1px solid var(--line); border-radius:6px; background:var(--surface); color:var(--gold); cursor:pointer; transition:background .15s ease,border-color .15s ease,color .15s ease;}
+.theme-toggle:hover,.theme-toggle:focus-visible{background:var(--surface2); border-color:var(--gold); color:var(--text); outline-color:var(--gold);}
+.theme-icon{width:21px; height:21px; fill:none; stroke:currentColor; stroke-linecap:round; stroke-linejoin:round; stroke-width:1.8;}
+.theme-icon-moon,:root[data-theme="light"] .theme-icon-sun{display:none;}
+:root[data-theme="light"] .theme-icon-moon{display:block;}
+:root:not([data-theme="light"]):not([data-theme="dark"]) .theme-icon-sun{display:none;}
+:root:not([data-theme="light"]):not([data-theme="dark"]) .theme-icon-moon{display:block;}
 .game-sidebar h2{margin:0 0 22px; color:var(--muted); font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;}
 .game-sidebar nav{display:grid; gap:8px;}
 .game-link{display:flex; align-items:center; width:100%; min-height:46px; padding:0 13px; border:1px solid transparent; border-radius:6px; background:transparent; color:var(--text); font:600 14px 'Manrope',system-ui,sans-serif; text-align:left; text-decoration:none; cursor:pointer;}
 .game-link[href]:hover,.game-link[href]:focus-visible{background:var(--surface2); border-color:var(--line);}
 .game-link:disabled{color:var(--muted); cursor:not-allowed; opacity:.6;}
-.landing-main{display:flex; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:16px; min-width:0; min-height:0; padding:32px;}
-.landing-logo{width:150px; height:150px; object-fit:contain;}
-.landing-main h1{font-family:'FOT-Yuruka Std',serif; font-weight:400; margin:0; text-align:center; font-size:clamp(32px,6vw,56px);}
-.landing-description{max-width:620px; margin:-10px 0 0; color:var(--muted); font-size:16px; line-height:1.65; text-align:center;}
+.landing-main{display:grid; flex:1; grid-template-columns:minmax(0,1.15fr) minmax(290px,.85fr); align-items:center; gap:clamp(32px,6vw,88px); width:min(1200px,100%); min-width:0; min-height:0; margin:0 auto; padding:90px 40px 32px;}
+.landing-copy{display:flex; align-items:center; gap:clamp(22px,4vw,48px); min-width:0;}
+.landing-logo{width:clamp(150px,19vw,240px); height:auto; flex:0 0 auto; object-fit:contain;}
+.landing-copy-text{display:grid; justify-items:start; gap:22px; min-width:0;}
+.landing-description{max-width:580px; margin:0; color:var(--text); font-size:clamp(20px,2.1vw,27px); line-height:1.6; text-align:left;}
+.landing-carousel{display:grid; justify-items:center; gap:12px; min-width:0; padding:20px; border:1px solid var(--line); border-radius:16px; background:var(--surface);}
+.preview-heading{text-align:center;}
+.preview-heading h2{margin:0; font-family:'HYWenHei',serif; font-size:18px; color:var(--gold);}
+.preview-heading p{margin:5px 0 0; color:var(--muted); font-size:13px;}
+.preview-stage{display:flex; justify-content:center; min-height:550px;}
+.preview-stage .result-card{flex:0 0 175px;}
+.preview-controls{display:flex; align-items:center; justify-content:center; gap:18px;}
+.preview-arrow{width:38px; height:38px; border:1px solid var(--line); border-radius:50%; background:var(--surface2); color:var(--text); font-size:25px; line-height:1; cursor:pointer;}
+.preview-arrow:hover,.preview-arrow:focus-visible{border-color:var(--gold); outline-color:var(--gold);}
+.preview-position{min-width:42px; color:var(--muted); font-size:13px; text-align:center;}
 .landing-footer{display:flex; align-items:center; justify-content:center; gap:16px; width:100%; margin:0; padding:16px 24px max(16px,env(safe-area-inset-bottom,0px)); color:var(--muted); font-size:12px; line-height:1.6; text-align:center;}
 .landing-footer a{color:var(--gold); text-underline-offset:3px;}
 .landing-footer a:hover,.landing-footer a:focus-visible{color:var(--text);}
@@ -137,10 +163,21 @@ footer:last-child{margin-top:12px;}
   .landing-footer{padding-right:16px; padding-left:16px;}
 }
 body:not(.landing-page) .wrap{padding-top:40px;}
+body.genshin-page .wrap{padding-top:60px;}
+@media(max-width:900px){
+  .landing-main{grid-template-columns:minmax(0,1fr) minmax(260px,.8fr); gap:28px; padding-right:24px; padding-left:24px;}
+  .landing-logo{width:clamp(140px,20vw,190px);}
+}
 @media(max-width:900px){
   .genshin-layout{grid-template-columns:minmax(0,1fr) 230px; gap:14px;}
 }
 @media(max-width:680px){
+  .landing-main{grid-template-columns:1fr; gap:30px; padding:88px 20px 24px;}
+  .landing-copy{flex-direction:row; align-items:center; gap:18px;}
+  .landing-logo{width:clamp(100px,30vw,150px);}
+  .landing-copy-text{gap:14px;}
+  .landing-description{font-size:clamp(18px,5vw,22px);}
+  .landing-carousel{width:min(100%,360px); justify-self:center; padding:16px 12px;}
   .genshin-layout{grid-template-columns:1fr;}
   .roll-history{position:static; max-height:340px;}
 }
