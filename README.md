@@ -9,10 +9,15 @@
 ## TODO
 * ~~Add artifact and weapon icons to /images~~
 * ~~Make it mobile-friendly~~
-* Add other gacha games into the site
-* Properly format and put stuff into the landing page
+* Add other gacha games to the site
+* ~~Properly format and put stuff into the landing page~~
 
 ## Changelog
+* 28/10/26
+  * Added light mode and a toggle for it
+  * Changed formatting of the landing page
+  * Added a randomizer preview on the landing page
+
 * 12/10/26
   * Added an icon for the landing page and changed the favicon
 
