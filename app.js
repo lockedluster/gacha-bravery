@@ -1,10 +1,6 @@
 const CHAR_NAME_SET = new Set(CHARS.map(c => c.n));
 const ARTIFACT_NAME_SET = new Set(ARTIFACTS);
 
-document.querySelectorAll('details').forEach(detail => {
-  detail.removeAttribute('open');
-});
-
 let ownedChars, ownedWeapons, ownedArtifacts;
 
 function load(key, all) {
@@ -100,13 +96,16 @@ function makeItemCard(name, owned, color, onToggle) {
 
 function buildCharGroups() {
   const host = document.getElementById('chars-groups');
+  const elementFilter = document.getElementById('chars-element-filter').value;
+  const weaponFilter = document.getElementById('chars-weapon-filter').value;
   host.innerHTML = '';
 
   Object.keys(ELEMENTS).forEach(ek => {
     const [ename, color] = ELEMENTS[ek];
-    const list = CHARS.filter(c => c.e === ek);
+    const list = CHARS.filter(c => c.e === ek && (!elementFilter || c.e === elementFilter) && (!weaponFilter || c.w === weaponFilter));
     const group = document.createElement('div');
     group.className = 'group';
+    group.hidden = list.length === 0;
     group.innerHTML = `<div class="group-head"><b style="color:${color}">${ename}</b>
       <span><button class="mini" data-el="${ek}" data-act="on">All</button> <button class="mini" data-el="${ek}" data-act="off">None</button></span></div>
       <div class="chips"></div>`;
@@ -124,7 +123,7 @@ function buildCharGroups() {
 
   host.querySelectorAll('.mini').forEach(button => {
     button.onclick = () => {
-      CHARS.filter(c => c.e === button.dataset.el).forEach(character => {
+      CHARS.filter(c => c.e === button.dataset.el && (!elementFilter || c.e === elementFilter) && (!weaponFilter || c.w === weaponFilter)).forEach(character => {
         if (button.dataset.act === 'on') ownedChars.add(character.n);
         else ownedChars.delete(character.n);
       });
@@ -137,11 +136,13 @@ function buildCharGroups() {
 
 function buildWeaponGroups() {
   const host = document.getElementById('weapons-groups');
+  const weaponFilter = document.getElementById('weapons-type-filter').value;
   host.innerHTML = '';
 
   Object.keys(WTYPES).forEach(wk => {
     const group = document.createElement('div');
     group.className = 'group';
+    group.hidden = Boolean(weaponFilter && wk !== weaponFilter);
     group.innerHTML = `<div class="group-head"><b>${WTYPES[wk]}</b>
       <span><button class="mini" data-w="${wk}" data-act="on">All</button> <button class="mini" data-w="${wk}" data-act="off">None</button></span></div>
       <div class="chips"></div>`;
@@ -207,10 +208,90 @@ function buildArtifactChips() {
 
 function updateCounts() {
   const allW = Object.values(WEAPONS).flat();
-  document.getElementById('chars-count').textContent = `${CHARS.filter(c => ownedChars.has(c.n)).length}/${CHARS.length}`;
-  document.getElementById('weapons-count').textContent = `${allW.filter(w => ownedWeapons.has(w)).length}/${allW.length}`;
-  document.getElementById('artifacts-count').textContent = `${ARTIFACTS.filter(a => ownedArtifacts.has(a)).length}/${ARTIFACTS.length}`;
+  const counts = {
+    chars: `${CHARS.filter(c => ownedChars.has(c.n)).length}/${CHARS.length}`,
+    weapons: `${allW.filter(w => ownedWeapons.has(w)).length}/${allW.length}`,
+    artifacts: `${ARTIFACTS.filter(a => ownedArtifacts.has(a)).length}/${ARTIFACTS.length}`
+  };
+  Object.entries(counts).forEach(([key, count]) => {
+    document.getElementById(`${key}-count`).textContent = count;
+    document.getElementById(`${key}-count-label`).textContent = count;
+  });
 }
+
+function populateCollectionFilters() {
+  const elementFilter = document.getElementById('chars-element-filter');
+  Object.entries(ELEMENTS).forEach(([key, [name]]) => {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = name;
+    elementFilter.appendChild(option);
+  });
+
+  [['chars-weapon-filter', 'All weapon types'], ['weapons-type-filter', 'All weapon types']].forEach(([id]) => {
+    const select = document.getElementById(id);
+    Object.entries(WTYPES).forEach(([key, name]) => {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = name;
+      select.appendChild(option);
+    });
+  });
+
+  elementFilter.addEventListener('change', buildCharGroups);
+  document.getElementById('chars-weapon-filter').addEventListener('change', buildCharGroups);
+  document.getElementById('weapons-type-filter').addEventListener('change', buildWeaponGroups);
+}
+
+function setCollectionLauncherImages() {
+  const images = {
+    'chars-popout': 'images/characters/traveler.png',
+    'weapons-popout': 'images/weapons/dull-blade.png',
+    'artifacts-popout': 'images/artifacts/gladiators-finale.png'
+  };
+
+  document.querySelectorAll('.collection-launcher').forEach(button => {
+    const image = button.querySelector('img');
+    image.src = images[button.dataset.popout];
+    image.onerror = () => { image.hidden = true; };
+  });
+}
+
+function closeCollectionPopouts(returnFocus = false) {
+  document.querySelectorAll('.collection-popout:not([hidden])').forEach(popout => {
+    popout.hidden = true;
+    const launcher = document.querySelector(`[data-popout="${popout.id}"]`);
+    launcher.setAttribute('aria-expanded', 'false');
+    if (returnFocus) launcher.focus();
+  });
+}
+
+document.querySelectorAll('.collection-launcher').forEach(button => {
+  button.addEventListener('click', () => {
+    const popout = document.getElementById(button.dataset.popout);
+    const wasOpen = !popout.hidden;
+    closeCollectionPopouts();
+    if (!wasOpen) {
+      popout.hidden = false;
+      button.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+
+document.querySelectorAll('.collection-popout .popout-close').forEach(button => {
+  button.addEventListener('click', () => closeCollectionPopouts(true));
+});
+
+document.addEventListener('click', event => {
+  const clickedInsideCollection = event.composedPath().some(target =>
+    target instanceof Element && target.matches('.collection-dock, .collection-popout')
+  );
+  if (!clickedInsideCollection) closeCollectionPopouts();
+});
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') closeCollectionPopouts(true);
+});
 
 const DOM = {
   teamSize: document.getElementById('team-size'),
@@ -242,6 +323,7 @@ const rnd = arr => arr[Math.floor(Math.random() * arr.length)];
 
 function renderRollResults(roll) {
   DOM.results.replaceChildren();
+  document.querySelector('.result-stage').classList.toggle('has-results', roll.length > 0);
   roll.forEach(({ character, weapon, artifacts }, index) => {
     const card = buildResultCard(character, weapon, artifacts);
     card.style.setProperty('--reveal-delay', `${index * 90}ms`);
@@ -365,6 +447,7 @@ function buildResultCard(ch, wpn, art) {
 DOM.rollBtn.onclick = () => {
   DOM.msg.textContent = '';
   DOM.results.innerHTML = '';
+  document.querySelector('.result-stage').classList.remove('has-results');
 
   const pool = CHARS.filter(c => ownedChars.has(c.n));
   const allowCombo = DOM.comboToggle.checked;
@@ -400,6 +483,8 @@ DOM.rollBtn.onclick = () => {
   addRollToHistory(roll);
 };
 
+populateCollectionFilters();
+setCollectionLauncherImages();
 buildCharGroups();
 buildWeaponGroups();
 buildArtifactChips();

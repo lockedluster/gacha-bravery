@@ -36,6 +36,25 @@
     </button>
   </nav>
 </aside>
+<section class="collection-popout card" id="chars-popout" role="dialog" aria-label="Owned characters" hidden>
+  <div class="collection-heading"><h2>Owned Characters <span class="count" id="chars-count-label"></span></h2><button class="popout-close" type="button" aria-label="Close owned characters">×</button></div>
+  <div class="collection-filters">
+    <label>Element<select id="chars-element-filter"><option value="">All elements</option></select></label>
+    <label>Weapon type<select id="chars-weapon-filter"><option value="">All weapon types</option></select></label>
+  </div>
+  <div id="chars-groups"></div>
+</section>
+<section class="collection-popout card" id="weapons-popout" role="dialog" aria-label="Owned weapons" hidden>
+  <div class="collection-heading"><h2>Owned Weapons <span class="count" id="weapons-count-label"></span></h2><button class="popout-close" type="button" aria-label="Close owned weapons">×</button></div>
+  <div class="collection-filters">
+    <label>Weapon type<select id="weapons-type-filter"><option value="">All weapon types</option></select></label>
+  </div>
+  <div id="weapons-groups"></div>
+</section>
+<section class="collection-popout card" id="artifacts-popout" role="dialog" aria-label="Owned artifact sets" hidden>
+  <div class="collection-heading"><h2>Owned Artifact Sets <span class="count" id="artifacts-count-label"></span></h2><button class="popout-close" type="button" aria-label="Close owned artifact sets">×</button></div>
+  <div id="artifacts-groups"></div>
+</section>
 <div class="wrap">
 <div class="genshin-layout">
 <main class="genshin-main">
@@ -43,18 +62,27 @@
   <h1>Genshin Impact</h1>
 </header>
 
-<div class="card"><details id="det-chars"><summary>Owned Characters <span class="count" id="chars-count"></span></summary><div id="chars-groups"></div></details></div>
-<div class="card"><details id="det-weapons"><summary>Owned Weapons <span class="count" id="weapons-count"></span></summary><div id="weapons-groups"></div></details></div>
-<div class="card"><details id="det-artifacts"><summary>Owned Artifact Sets <span class="count" id="artifacts-count"></span></summary><div id="artifacts-groups"></div></details></div>
-
-<div class="controls">
-  <div class="stepper"><button id="team-dec">−</button><span id="team-size">4</span> characters<button id="team-inc">+</button></div>
-  <label class="toggle-row"><input type="checkbox" id="combo-toggle"> allow 2pc+2pc combinations</label>
+<div class="result-stage">
+  <nav class="collection-dock" aria-label="Owned item collections">
+    <button class="collection-launcher" type="button" aria-label="Owned characters" aria-controls="chars-popout" aria-expanded="false" data-popout="chars-popout">
+      <img alt="" aria-hidden="true"><span class="launcher-count" id="chars-count"></span>
+    </button>
+    <button class="collection-launcher" type="button" aria-label="Owned weapons" aria-controls="weapons-popout" aria-expanded="false" data-popout="weapons-popout">
+      <img alt="" aria-hidden="true"><span class="launcher-count" id="weapons-count"></span>
+    </button>
+    <button class="collection-launcher" type="button" aria-label="Owned artifact sets" aria-controls="artifacts-popout" aria-expanded="false" data-popout="artifacts-popout">
+      <img alt="" aria-hidden="true"><span class="launcher-count" id="artifacts-count"></span>
+    </button>
+  </nav>
+  <div id="results"></div>
 </div>
 
-<button class="roll-btn" id="roll-btn">🎲 Roll</button>
+<div class="controls">
+  <div class="stepper"><button id="team-dec" type="button" aria-label="Decrease team size">−</button><span id="team-size">4</span> characters<button id="team-inc" type="button" aria-label="Increase team size">+</button></div>
+  <label class="toggle-row"><input type="checkbox" id="combo-toggle"> allow 2pc+2pc combinations</label>
+</div>
+<button class="roll-btn" id="roll-btn" type="button">🎲 Roll</button>
 <div id="msg"></div>
-<div id="results"></div>
 </main>
 
 <aside class="roll-history card" aria-labelledby="history-title">
