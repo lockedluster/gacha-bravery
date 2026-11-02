@@ -1,40 +1,15 @@
+![Gacha Bravery logo](images/gacha-bravery-logo.png)
+
 # Gacha Bravery
 
-> Inspired by Ultimate Bravery from LoL. A Randomizer++ for Genshin Impact, Wuthering Waves, etc., where every part of your character or team loadout is random, including equipment, weapons, and the characters themselves.
+Gacha Bravery is a gacha game team and loadout randomizer inspired by Ultimate Bravery from League of Legends. Roll a team of characters with random weapons and artifact sets, using the characters and items in your collection.
 
 ## Features
 
-* Toggleable icons for characters, weapons, and equipment to add/remove them from the pool of selectable options.
+* Randomly assign each character a compatible weapon and either a 4-piece artifact set or, optionally, two different 2-piece sets.
+* Track which characters, weapons, and artifact sets you own. Selections are saved in your browser and used as the randomizer pools.
+* Review previous rolls in the roll history.
 
-## TODO
-* ~~Add artifact and weapon icons to /images~~
-* ~~Make it mobile-friendly~~
-* Add other gacha games to the site
-* ~~Properly format and put stuff into the landing page~~
+Genshin Impact is currently the only available game; other games shown in the menu are not yet available.
 
-## Changelog
-* 3/11/26
-  * Adjusted Genshin page's UI
-
-* 28/10/26
-  * Added light mode and a toggle for it
-  * Changed formatting of the landing page
-  * Added a randomizer preview on the landing page
-
-* 12/10/26
-  * Added an icon for the landing page and changed the favicon
-
-* 10/10/26 v2
-  * Added roll history
-  * Added the name of the project beside the sidebar icon
-
-* 10/10/26
-  * Made a simple landing page
-  * Added a sidebar for future additions
-
-* 6/10/26
-  * Added animations when rolling
-
-* 4/10/2026
-  * Made UI cleaner
-  * Removed 4-Star "Prayers" sets
+See [CHANGELOG.md](CHANGELOG.md) for the release history.
