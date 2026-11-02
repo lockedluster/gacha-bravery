@@ -13,6 +13,9 @@
 * ~~Properly format and put stuff into the landing page~~
 
 ## Changelog
+* 3/11/26
+  * Adjusted Genshin page's UI
+
 * 28/10/26
   * Added light mode and a toggle for it
   * Changed formatting of the landing page
