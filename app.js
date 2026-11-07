@@ -64,7 +64,7 @@ function resultImageMarkup(name, kind = 'char', color = null) {
   return `<div class="result-icon"><img src="${image}" alt="${name}" loading="lazy"></div>`;
 }
 
-function makeItemCard(name, owned, color, onToggle) {
+function makeItemCard(name, owned, color, onToggle, rarity = null) {
   const card = document.createElement('div');
   card.className = 'item-card' + (owned ? ' on' : '');
   if (color) card.style.setProperty('--accent', color);
@@ -78,6 +78,15 @@ function makeItemCard(name, owned, color, onToggle) {
     thumb.innerHTML = `<img src="${image}" alt="${name}" loading="lazy"><span class="check">✓</span>`;
   } else {
     thumb.innerHTML = `<span class="ph">${initials(name)}</span><span class="check">✓</span>`;
+  }
+
+  if (rarity) {
+    const rarityLabel = document.createElement('span');
+    rarityLabel.className = 'item-rarity';
+    rarityLabel.textContent = '★'.repeat(rarity);
+    rarityLabel.setAttribute('role', 'img');
+    rarityLabel.setAttribute('aria-label', `${rarity}-star rarity`);
+    thumb.appendChild(rarityLabel);
   }
 
   const label = document.createElement('div');
@@ -94,81 +103,65 @@ function makeItemCard(name, owned, color, onToggle) {
   return card;
 }
 
-function buildCharGroups() {
-  const host = document.getElementById('chars-groups');
+function getFilteredCharacters() {
   const elementFilter = document.getElementById('chars-element-filter').value;
   const weaponFilter = document.getElementById('chars-weapon-filter').value;
+  const rarityFilter = document.getElementById('chars-rarity-filter').value;
+  return CHARS.filter(character =>
+    (!elementFilter || character.e === elementFilter) &&
+    (!weaponFilter || character.w === weaponFilter) &&
+    (!rarityFilter || character.rarity === Number(rarityFilter))
+  );
+}
+
+function buildCharacterList() {
+  const host = document.getElementById('chars-items');
   host.innerHTML = '';
-
-  Object.keys(ELEMENTS).forEach(ek => {
-    const [ename, color] = ELEMENTS[ek];
-    const list = CHARS.filter(c => c.e === ek && (!elementFilter || c.e === elementFilter) && (!weaponFilter || c.w === weaponFilter));
-    const group = document.createElement('div');
-    group.className = 'group';
-    group.hidden = list.length === 0;
-    group.innerHTML = `<div class="group-head"><b style="color:${color}">${ename}</b>
-      <span><button class="mini" data-el="${ek}" data-act="on">All</button> <button class="mini" data-el="${ek}" data-act="off">None</button></span></div>
-      <div class="chips"></div>`;
-
-    host.appendChild(group);
-    const chipsEl = group.querySelector('.chips');
-    list.forEach(character => {
-      chipsEl.appendChild(makeItemCard(character.n, ownedChars.has(character.n), color, on => {
-        if (on) ownedChars.add(character.n); else ownedChars.delete(character.n);
-        save('tr_chars', ownedChars);
-        updateCounts();
-      }));
-    });
-  });
-
-  host.querySelectorAll('.mini').forEach(button => {
-    button.onclick = () => {
-      CHARS.filter(c => c.e === button.dataset.el && (!elementFilter || c.e === elementFilter) && (!weaponFilter || c.w === weaponFilter)).forEach(character => {
-        if (button.dataset.act === 'on') ownedChars.add(character.n);
-        else ownedChars.delete(character.n);
-      });
+  getFilteredCharacters().forEach(character => {
+    const [, color] = ELEMENTS[character.e];
+    host.appendChild(makeItemCard(character.n, ownedChars.has(character.n), color, on => {
+      if (on) ownedChars.add(character.n); else ownedChars.delete(character.n);
       save('tr_chars', ownedChars);
-      buildCharGroups();
       updateCounts();
-    };
+    }, character.rarity));
   });
 }
 
-function buildWeaponGroups() {
-  const host = document.getElementById('weapons-groups');
+function getFilteredWeapons() {
   const weaponFilter = document.getElementById('weapons-type-filter').value;
+  const rarityFilter = document.getElementById('weapons-rarity-filter').value;
+  return Object.entries(WEAPONS)
+    .filter(([type]) => !weaponFilter || type === weaponFilter)
+    .flatMap(([, weapons]) => weapons)
+    .filter(weapon => !rarityFilter || WEAPON_RARITIES[weapon] === Number(rarityFilter));
+}
+
+function buildWeaponList() {
+  const host = document.getElementById('weapons-items');
   host.innerHTML = '';
-
-  Object.keys(WTYPES).forEach(wk => {
-    const group = document.createElement('div');
-    group.className = 'group';
-    group.hidden = Boolean(weaponFilter && wk !== weaponFilter);
-    group.innerHTML = `<div class="group-head"><b>${WTYPES[wk]}</b>
-      <span><button class="mini" data-w="${wk}" data-act="on">All</button> <button class="mini" data-w="${wk}" data-act="off">None</button></span></div>
-      <div class="chips"></div>`;
-
-    host.appendChild(group);
-    const chipsEl = group.querySelector('.chips');
-    WEAPONS[wk].forEach(weapon => {
-      chipsEl.appendChild(makeItemCard(weapon, ownedWeapons.has(weapon), null, on => {
-        if (on) ownedWeapons.add(weapon); else ownedWeapons.delete(weapon);
-        save('tr_weapons', ownedWeapons);
-        updateCounts();
-      }));
-    });
-  });
-
-  host.querySelectorAll('.mini').forEach(button => {
-    button.onclick = () => {
-      WEAPONS[button.dataset.w].forEach(weapon => {
-        if (button.dataset.act === 'on') ownedWeapons.add(weapon);
-        else ownedWeapons.delete(weapon);
-      });
+  getFilteredWeapons().forEach(weapon => {
+    host.appendChild(makeItemCard(weapon, ownedWeapons.has(weapon), null, on => {
+      if (on) ownedWeapons.add(weapon); else ownedWeapons.delete(weapon);
       save('tr_weapons', ownedWeapons);
-      buildWeaponGroups();
       updateCounts();
-    };
+    }, WEAPON_RARITIES[weapon]));
   });
+}
+
+function updateCollectionOwnership(collection, action) {
+  const isOwned = action === 'all';
+  const items = collection === 'chars'
+    ? getFilteredCharacters().map(character => character.n)
+    : getFilteredWeapons();
+  const owned = collection === 'chars' ? ownedChars : ownedWeapons;
+  items.forEach(item => {
+    if (isOwned) owned.add(item);
+    else owned.delete(item);
+  });
+  save(collection === 'chars' ? 'tr_chars' : 'tr_weapons', owned);
+  if (collection === 'chars') buildCharacterList();
+  else buildWeaponList();
+  updateCounts();
 }
 
 function buildArtifactChips() {
@@ -238,10 +231,33 @@ function populateCollectionFilters() {
     });
   });
 
-  elementFilter.addEventListener('change', buildCharGroups);
-  document.getElementById('chars-weapon-filter').addEventListener('change', buildCharGroups);
-  document.getElementById('weapons-type-filter').addEventListener('change', buildWeaponGroups);
+  const characterRarities = [...new Set(CHARS.map(character => character.rarity))].sort((a, b) => b - a);
+  const weaponRarities = [...new Set(Object.values(WEAPON_RARITIES))].sort((a, b) => b - a);
+  [
+    ['chars-rarity-filter', characterRarities],
+    ['weapons-rarity-filter', weaponRarities]
+  ].forEach(([id, rarities]) => {
+    const select = document.getElementById(id);
+    rarities.forEach(rarity => {
+      const option = document.createElement('option');
+      option.value = rarity;
+      option.textContent = `${rarity}-star`;
+      select.appendChild(option);
+    });
+  });
+
+  elementFilter.addEventListener('change', buildCharacterList);
+  document.getElementById('chars-weapon-filter').addEventListener('change', buildCharacterList);
+  document.getElementById('chars-rarity-filter').addEventListener('change', buildCharacterList);
+  document.getElementById('weapons-type-filter').addEventListener('change', buildWeaponList);
+  document.getElementById('weapons-rarity-filter').addEventListener('change', buildWeaponList);
 }
+
+document.querySelectorAll('.collection-bulk-action').forEach(button => {
+  button.addEventListener('click', () => {
+    updateCollectionOwnership(button.dataset.collection, button.dataset.action);
+  });
+});
 
 function setCollectionLauncherImages() {
   const images = {
@@ -485,7 +501,7 @@ DOM.rollBtn.onclick = () => {
 
 populateCollectionFilters();
 setCollectionLauncherImages();
-buildCharGroups();
-buildWeaponGroups();
+buildCharacterList();
+buildWeaponList();
 buildArtifactChips();
 updateCounts();

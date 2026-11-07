@@ -41,15 +41,25 @@
   <div class="collection-filters">
     <label>Element<select id="chars-element-filter"><option value="">All elements</option></select></label>
     <label>Weapon type<select id="chars-weapon-filter"><option value="">All weapon types</option></select></label>
+    <label>Rarity<select id="chars-rarity-filter"><option value="">All rarities</option></select></label>
   </div>
-  <div id="chars-groups"></div>
+  <div class="collection-actions">
+    <button class="collection-bulk-action" type="button" data-collection="chars" data-action="all">All shown</button>
+    <button class="collection-bulk-action" type="button" data-collection="chars" data-action="none">None shown</button>
+  </div>
+  <div class="chips" id="chars-items"></div>
 </section>
 <section class="collection-popout card" id="weapons-popout" role="dialog" aria-label="Owned weapons" hidden>
   <div class="collection-heading"><h2>Owned Weapons <span class="count" id="weapons-count-label"></span></h2><button class="popout-close" type="button" aria-label="Close owned weapons">×</button></div>
   <div class="collection-filters">
     <label>Weapon type<select id="weapons-type-filter"><option value="">All weapon types</option></select></label>
+    <label>Rarity<select id="weapons-rarity-filter"><option value="">All rarities</option></select></label>
   </div>
-  <div id="weapons-groups"></div>
+  <div class="collection-actions">
+    <button class="collection-bulk-action" type="button" data-collection="weapons" data-action="all">All shown</button>
+    <button class="collection-bulk-action" type="button" data-collection="weapons" data-action="none">None shown</button>
+  </div>
+  <div class="chips" id="weapons-items"></div>
 </section>
 <section class="collection-popout card" id="artifacts-popout" role="dialog" aria-label="Owned artifact sets" hidden>
   <div class="collection-heading"><h2>Owned Artifact Sets <span class="count" id="artifacts-count-label"></span></h2><button class="popout-close" type="button" aria-label="Close owned artifact sets">×</button></div>

@@ -1,5 +1,10 @@
 # Changelog
 
+* 8/11/26
+  * Added rarity indicators and rarity filters to the character and weapon collection popouts
+  * Styled character and weapon cards by rarity
+  * Removed element and weapon-type groupings from the character and weapon popouts
+
 * 7/11/26
   * Added Mitya and Valeriy
   * Added Starsealed Edict

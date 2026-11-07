@@ -140,11 +140,72 @@ M:["A Thousand Floating Dreams","Angelos' Heptades","Apprentice's Notes","Ash-Gr
 };
 Object.keys(WEAPONS).forEach(k => WEAPONS[k].sort((a, b) => a.localeCompare(b)));
 
+// Rarity metadata is based on GachaBase's Genshin Impact database.
+const FIVE_STAR_CHARACTERS = new Set([
+  "Diluc","Klee","Yoimiya","Hu Tao","Dehya","Lyney","Arlecchino","Mavuika","Nicole","Durin",
+  "Traveler (Pyro)","Tartaglia","Mona","Sangonomiya Kokomi","Yelan","Kamisato Ayato","Nilou",
+  "Furina","Neuvillette","Sigewinne","Mualani","Vodyanitsa","Columbina","Traveler (Hydro)",
+  "Jean","Venti","Xiao","Kaedehara Kazuha","Wanderer","Xianyun","Chasca","Yumemizuki Mizuki",
+  "Vesna","Varka","Traveler (Anemo)","Keqing","Cyno","Yae Miko","Raiden Shogun","Clorinde",
+  "Varesa","Flins","Ineffa","Mitya","Traveler (Electro)","Zhongli","Albedo","Arataki Itto",
+  "Chiori","Navia","Xilonen","Linnea","Zibai","Traveler (Geo)","Qiqi","Ganyu","Eula","Shenhe",
+  "Kamisato Ayaka","Wriothesley","Escoffier","Skirk","Odette","Citlali","Aloy","Sandrone",
+  "Lohen","Traveler (Cryo)","Tighnari","Alhaitham","Nahida","Baizhu","Emilie","Kinich","Lauma",
+  "Nefer","Traveler (Dendro)"
+]);
+
+const WEAPON_RARITY_GROUPS = {
+  1: [
+    "Dull Blade","Waster Greatsword","Beginner's Protector","Hunter's Bow","Apprentice's Notes"
+  ],
+  2: [
+    "Silver Sword","Old Merc's Pal","Iron Point","Seasoned Hunter's Bow","Pocket Grimoire"
+  ],
+  3: [
+    "Cool Steel","Dark Iron Sword","Fillet Blade","Harbinger of Dawn","Skyrider Sword",
+    "Traveler's Handy Sword","Bloodtainted Greatsword","Debate Club","Ferrous Shadow",
+    "Skyrider Greatsword","White Iron Greatsword","Black Tassel","Halberd","White Tassel",
+    "Messenger","Raven Bow","Recurve Bow","Sharpshooter's Oath","Slingshot","Emerald Orb",
+    "Magic Guide","Otherworldly Story","Thrilling Tales of Dragon Slayers","Twin Nephrite"
+  ],
+  5: [
+    "Absolution","Aquila Favonia","Athame Artis","Azurelight","Beyond the Chrysalis",
+    "Exaiphanes Blade","Freedom-Sworn","Haran Geppaku Futsu","Key of Khaj-Nisut",
+    "Light of Foliar Incision","Lightbearing Moonshard","Mistsplitter Reforged",
+    "Peak Patrol Song","Primordial Jade Cutter","Skyward Blade","Splendor of Tranquil Waters",
+    "Summit Shaper","Uraku Misugiri","Whitelake Frostfeather","A Teaspoon of Transcendence",
+    "A Thousand Blazing Suns","Beacon of the Reed Sea","Fang of the Mountain King",
+    "Gest of the Mighty Wolf","Redhorn Stonethresher","Skyward Pride","Song of Broken Pines",
+    "The Unforged","Verdict","Wolf's Gravestone","Bloodsoaked Ruins","Calamity Queller",
+    "Crimson Moon's Semblance","Disaster and Remorse","Engulfing Lightning","Fractured Halo",
+    "Lumidouce Elegy","Primordial Jade Winged-Spear","Skyward Spine","Staff of Homa",
+    "Staff of the Scarlet Sands","Symphonist of Scents","Vortex Vanquisher","Amos' Bow",
+    "Aqua Simulacra","Astral Vulture's Crimson Plumage","Elegy for the End",
+    "Golden Frostbound Oath","Hunter's Path","Polar Star","Silvershower Heartstrings",
+    "Skyward Harp","The Daybreak Chronicles","The First Great Magic","Thundering Pulse",
+    "A Thousand Floating Dreams","Angelos' Heptades","Cashflow Supervision","Crane's Echoing Call",
+    "Everlasting Moonglow","Hymn of the Maelstrom","Jadefall's Splendor","Kagura's Verity",
+    "Lost Prayer to the Sacred Winds","Memory of Dust","Nightweaver's Looking Glass",
+    "Nocturne's Curtain Call","Reliquary of Truth","Skyward Atlas","Starcaller's Watch",
+    "Starsealed Edict","Sunny Morning Sleep-In","Surf's Up","Tome of the Eternal Flow",
+    "Tulaytullah's Remembrance","Vivid Notions"
+  ]
+};
+
+const WEAPON_RARITIES = Object.fromEntries(
+  Object.entries(WEAPON_RARITY_GROUPS).flatMap(([rarity, names]) =>
+    names.map(name => [name, Number(rarity)])
+  )
+);
+Object.values(WEAPONS).flat().forEach(name => {
+  if (!WEAPON_RARITIES[name]) WEAPON_RARITIES[name] = 4;
+});
+
 const ARTIFACTS = ["Resolution of Sojourner","Brave Heart","Defender's Will","Tiny Miracle","Berserker","Martial Artist","Instructor","Gambler","The Exile","Scholar","Blizzard Strayer","Thundersoother","Lavawalker","Maiden Beloved","Gladiator's Finale","Viridescent Venerer","Wanderer's Troupe","Thundering Fury","Crimson Witch of Flames","Noblesse Oblige","Bloodstained Chivalry","Archaic Petra","Retracing Bolide","Heart of Depth","Tenacity of the Millelith","Pale Flame","Shimenawa's Reminiscence","Emblem of Severed Fate","Husk of Opulent Dreams","Ocean-Hued Clam","Vermillion Hereafter","Echoes of an Offering","Deepwood Memories","Gilded Dreams","Desert Pavilion Chronicle","Flower of Paradise Lost","Nymph's Dream","Vourukasha's Glow","Marechaussee Hunter","Golden Troupe","Song of Days Past","Nighttime Whispers in the Echoing Woods","Fragment of Harmonic Whimsy","Unfinished Reverie","Scroll of the Hero of Cinder City","Obsidian Codex","Long Night's Oath","Finale of the Deep Galleries","Night of the Sky's Unveiling","Silken Moon's Serenade","Aubade of Morningstar and Moon","A Day Carved From Rising Winds","Celestial Gift","Disenchantment in Deep Shadow","Scarlet Proof","Heart of the Furnace"];
 
 const CHARS = CHAR_TXT.trim().split("\n").map(line => {
   const [n, e, w, g] = line.split("|");
-  return { n, e, w, g: g || null };
+  return { n, e, w, g: g || null, rarity: FIVE_STAR_CHARACTERS.has(n) ? 5 : 4 };
 }).sort((a, b) => a.n.localeCompare(b.n));
 
 const ITEM_IMAGES = {
