@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gacha Bravery</title>
+<link rel="icon" type="image/png" href="images/gacha-bravery-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="theme.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="genshin-page">
+<button class="sidebar-toggle" type="button" aria-label="Open game menu" aria-controls="game-sidebar" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+<a class="brand-link" href="index.html">Gacha Bravery</a>
+<div class="topbar-divider" aria-hidden="true"></div>
+<button class="theme-toggle" type="button" aria-label="Switch to light mode" title="Switch to light mode" aria-pressed="false">
+  <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg>
+  <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 15.1A8.5 8.5 0 0 1 8.9 3.8 8.5 8.5 0 1 0 20.2 15.1Z"></path></svg>
+</button>
+<aside class="game-sidebar" id="game-sidebar" aria-label="Game options" aria-hidden="true" inert>
+  <h2>Games</h2>
+  <nav>
+    <button class="game-link" type="button" disabled aria-current="page">Genshin Impact</button>
+    <button class="game-link" type="button" disabled aria-label="Honkai: Star Rail, unavailable">
+      Honkai: Star Rail
+    </button>
+    <button class="game-link" type="button" disabled aria-label="Zenless Zone Zero, unavailable">
+      Zenless Zone Zero
+    </button>
+    <button class="game-link" type="button" disabled aria-label="Wuthering Waves, unavailable">
+      Wuthering Waves
+    </button>
+  </nav>
+</aside>
+<section class="collection-popout card" id="chars-popout" role="dialog" aria-label="Owned characters" hidden>
+  <div class="collection-heading"><h2>Owned Characters <span class="count" id="chars-count-label"></span></h2><button class="popout-close" type="button" aria-label="Close owned characters">×</button></div>
+  <div class="collection-filters">
+    <label>Element<select id="chars-element-filter"><option value="">All elements</option></select></label>
+    <label>Weapon type<select id="chars-weapon-filter"><option value="">All weapon types</option></select></label>
+  </div>
+  <div id="chars-groups"></div>
+</section>
+<section class="collection-popout card" id="weapons-popout" role="dialog" aria-label="Owned weapons" hidden>
+  <div class="collection-heading"><h2>Owned Weapons <span class="count" id="weapons-count-label"></span></h2><button class="popout-close" type="button" aria-label="Close owned weapons">×</button></div>
+  <div class="collection-filters">
+    <label>Weapon type<select id="weapons-type-filter"><option value="">All weapon types</option></select></label>
+  </div>
+  <div id="weapons-groups"></div>
+</section>
+<section class="collection-popout card" id="artifacts-popout" role="dialog" aria-label="Owned artifact sets" hidden>
+  <div class="collection-heading"><h2>Owned Artifact Sets <span class="count" id="artifacts-count-label"></span></h2><button class="popout-close" type="button" aria-label="Close owned artifact sets">×</button></div>
+  <div id="artifacts-groups"></div>
+</section>
+<div class="wrap">
+<div class="genshin-layout">
+<main class="genshin-main">
+<header>
+  <h1>Genshin Impact</h1>
+</header>
+
+<div class="result-stage">
+  <nav class="collection-dock" aria-label="Owned item collections">
+    <button class="collection-launcher" type="button" aria-label="Owned characters" aria-controls="chars-popout" aria-expanded="false" data-popout="chars-popout">
+      <img alt="" aria-hidden="true"><span class="launcher-count" id="chars-count"></span>
+    </button>
+    <button class="collection-launcher" type="button" aria-label="Owned weapons" aria-controls="weapons-popout" aria-expanded="false" data-popout="weapons-popout">
+      <img alt="" aria-hidden="true"><span class="launcher-count" id="weapons-count"></span>
+    </button>
+    <button class="collection-launcher" type="button" aria-label="Owned artifact sets" aria-controls="artifacts-popout" aria-expanded="false" data-popout="artifacts-popout">
+      <img alt="" aria-hidden="true"><span class="launcher-count" id="artifacts-count"></span>
+    </button>
+  </nav>
+  <div id="results"></div>
+</div>
+
+<div class="controls">
+  <div class="stepper"><button id="team-dec" type="button" aria-label="Decrease team size">−</button><span id="team-size">4</span> characters<button id="team-inc" type="button" aria-label="Increase team size">+</button></div>
+  <label class="toggle-row"><input type="checkbox" id="combo-toggle"> allow 2pc+2pc combinations</label>
+</div>
+<button class="roll-btn" id="roll-btn" type="button">🎲 Roll</button>
+<div id="msg"></div>
+</main>
+
+<aside class="roll-history card" aria-labelledby="history-title">
+  <div class="history-heading">
+    <h2 id="history-title">Roll History</h2>
+  </div>
+  <ol id="roll-history" aria-live="polite">
+    <li class="history-empty">Your rolls will appear here.</li>
+  </ol>
+</aside>
+</div>
+
+<footer class="landing-footer">This site is not affiliated with or endorsed by HoYoverse.</footer>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="sidebar.js"></script>
+</body>
+</html>
