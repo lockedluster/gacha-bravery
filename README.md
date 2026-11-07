@@ -1,4 +1,4 @@
-![Gacha Bravery logo](images/gacha-bravery-logo.png)
+<img src="images/gacha-bravery-logo.png" alt="Gacha Bravery logo" width="120">
 
 # Gacha Bravery
 

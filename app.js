@@ -51,8 +51,8 @@ function slugify(name) {
 
 function getItemImagePath(name, kind = 'char') {
   if (kind === 'char') return ITEM_IMAGES[name] || null;
-  if (kind === 'weapon') return `images/weapons/${slugify(name)}.png`;
-  if (kind === 'artifact') return `images/artifacts/${slugify(name)}.png`;
+  if (kind === 'weapon') return `images/genshin/weapons/${slugify(name)}.png`;
+  if (kind === 'artifact') return `images/genshin/artifacts/${slugify(name)}.png`;
   return null;
 }
 
@@ -245,9 +245,9 @@ function populateCollectionFilters() {
 
 function setCollectionLauncherImages() {
   const images = {
-    'chars-popout': 'images/characters/traveler.png',
-    'weapons-popout': 'images/weapons/dull-blade.png',
-    'artifacts-popout': 'images/artifacts/gladiators-finale.png'
+    'chars-popout': 'images/genshin/characters/traveler.png',
+    'weapons-popout': 'images/genshin/weapons/dull-blade.png',
+    'artifacts-popout': 'images/genshin/artifacts/gladiators-finale.png'
   };
 
   document.querySelectorAll('.collection-launcher').forEach(button => {

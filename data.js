@@ -150,24 +150,24 @@ const CHARS = CHAR_TXT.trim().split("\n").map(line => {
 const ITEM_IMAGES = {
   ...Object.fromEntries(Object.values(WEAPONS).flat().map(name => [
     name,
-    `images/weapons/${name.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[()']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}.png`
+    `images/genshin/weapons/${name.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[()']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}.png`
   ])),
   ...Object.fromEntries(CHARS.map(({n}) => [
     n,
-    `images/characters/${n.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[()']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}.png`
+    `images/genshin/characters/${n.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[()']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}.png`
   ])),
-  "Traveler (Pyro)":"images/characters/traveler.png",
-  "Traveler (Hydro)":"images/characters/traveler.png",
-  "Traveler (Anemo)":"images/characters/traveler.png",
-  "Traveler (Electro)":"images/characters/traveler.png",
-  "Traveler (Geo)":"images/characters/traveler.png",
-  "Traveler (Cryo)":"images/characters/traveler.png",
-  "Traveler (Dendro)":"images/characters/traveler.png",
-  "Yumemizuki Mizuki":"images/characters/mizuki.png",
-  "Lan Yan":"images/characters/lanyan.png",
+  "Traveler (Pyro)":"images/genshin/characters/traveler.png",
+  "Traveler (Hydro)":"images/genshin/characters/traveler.png",
+  "Traveler (Anemo)":"images/genshin/characters/traveler.png",
+  "Traveler (Electro)":"images/genshin/characters/traveler.png",
+  "Traveler (Geo)":"images/genshin/characters/traveler.png",
+  "Traveler (Cryo)":"images/genshin/characters/traveler.png",
+  "Traveler (Dendro)":"images/genshin/characters/traveler.png",
+  "Yumemizuki Mizuki":"images/genshin/characters/mizuki.png",
+  "Lan Yan":"images/genshin/characters/lanyan.png",
   ...Object.fromEntries(ARTIFACTS.map(name => [
     name,
-    `images/artifacts/${name.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[()']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}.png`
+    `images/genshin/artifacts/${name.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[()']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}.png`
   ]))
 };
 
