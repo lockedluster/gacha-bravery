@@ -123,7 +123,7 @@ footer + footer{margin-top:6px;}
 footer:last-child{margin-top:12px;}
 .landing-page{display:flex; flex-direction:column; min-height:100vh; padding:0;}
 body::before{position:fixed; z-index:15; inset:0 0 auto; height:69px; background:var(--bg); content:""; pointer-events:none;}
-.game-sidebar{position:fixed; z-index:20; inset:0 auto 0 0; width:min(280px,85vw); padding:76px 18px 24px; background:var(--surface); border-right:1px solid var(--line); box-shadow:12px 0 32px #0003; transform:translateX(-105%); visibility:hidden; transition:transform .22s ease,visibility .22s;}
+.game-sidebar{position:fixed; z-index:27; inset:0 auto 0 0; width:min(280px,85vw); padding:76px 18px 24px; background:var(--surface); border-right:1px solid var(--line); box-shadow:12px 0 32px #0003; transform:translateX(-105%); visibility:hidden; transition:transform .22s ease,visibility .22s;}
 .sidebar-open .game-sidebar{transform:translateX(0); visibility:visible;}
 .sidebar-toggle{position:fixed; z-index:30; top:14px; left:14px; display:grid; align-content:center; justify-items:center; gap:5px; width:44px; height:44px; padding:0; border:1px solid var(--line); border-radius:6px; background:var(--surface); color:var(--text); cursor:pointer;}
 .sidebar-toggle span{width:20px; height:2px; border-radius:1px; background:currentColor;}
@@ -148,7 +148,7 @@ body::before{position:fixed; z-index:15; inset:0 0 auto; height:69px; background
 .collection-launcher:hover,.collection-launcher:focus-visible,.collection-launcher[aria-expanded="true"]{transform:scale(1.08); border-color:var(--text); outline-color:var(--gold);}
 .collection-launcher img{width:100%; height:100%; border-radius:50%; object-fit:cover;}
 .launcher-count{position:absolute; right:-5px; bottom:-4px; padding:2px 4px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:var(--text); font-size:8px; line-height:1.1; white-space:nowrap;}
-.collection-popout{position:fixed; z-index:17; top:50%; left:76px; width:min(690px,calc(100vw - 92px)); max-height:min(82vh,900px); margin:0; padding:16px; overflow:auto; transform:translateY(-50%); box-shadow:0 14px 42px #0008;}
+.collection-popout{position:fixed; z-index:26; top:50%; left:76px; width:min(690px,calc(100vw - 92px)); max-height:min(82vh,900px); margin:0; padding:16px; overflow:auto; transform:translateY(-50%); box-shadow:0 14px 42px #0008;}
 .collection-popout[hidden]{display:none;}
 .collection-heading{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid var(--line);}
 .collection-heading h2{margin:0; font:600 17px 'HYWenHei',serif;}
